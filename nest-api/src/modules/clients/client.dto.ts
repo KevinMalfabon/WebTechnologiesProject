@@ -13,7 +13,7 @@ export class CreateClientDto {
 
   @IsOptional()
   @IsUrl()
-  pictureUrl?: string;
+  picture?: string;
 }
 
 export class UpdateClientDto {
@@ -31,7 +31,7 @@ export class UpdateClientDto {
 
   @IsOptional()
   @IsUrl()
-  pictureUrl?: string;
+  picture?: string;
 }
 
 export class GetClientsDto {

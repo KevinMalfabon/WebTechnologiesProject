@@ -31,7 +31,7 @@ export class ClientService {
       firstName: dto.firstName,
       lastName: dto.lastName,
       email: dto.email ?? null,
-      pictureUrl: dto.pictureUrl ?? null,
+      picture: dto.picture ?? null,
     });
   }
 
@@ -39,7 +39,7 @@ export class ClientService {
     const updated = await this.clientRepository.updateById(id, {
       ...dto,
       email: dto.email ?? undefined,
-      pictureUrl: dto.pictureUrl ?? undefined,
+      picture: dto.picture ?? undefined,
     });
     if (!updated) throw new NotFoundException('Client not found');
     return updated;

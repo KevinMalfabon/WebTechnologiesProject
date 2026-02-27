@@ -15,5 +15,5 @@ export class ClientEntity {
   email: string | null;
 
   @Column({ type: 'varchar', length: 2048, nullable: true })
-  pictureUrl: string | null;
+  picture: string | null;
 }
