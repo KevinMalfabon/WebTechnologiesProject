@@ -16,7 +16,7 @@ export class ClientService {
     return this.clientRepository.findAndCount({
       limit,
       offset,
-      order: { [sortProperty]: sortDirection } as any, // abajo te digo cómo quitar el any si quieres
+      order: { [sortProperty]: sortDirection },
     });
   }
 
