@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useClientProvider } from '../providers/useClientProvider'
-import { ClientListItem } from './ClientListItem'
-import { CreateClientModal } from './CreateClientModal'
+import { useClientProvider } from '../providers/useSaleProvider'
+import { ClientListItem } from './SaleListItem'
+import { CreateClientModal } from './CreateSaleModal'
 
 export function ClientList() {
   const { clients, loadClients, deleteClient, updateClient, createClient } =

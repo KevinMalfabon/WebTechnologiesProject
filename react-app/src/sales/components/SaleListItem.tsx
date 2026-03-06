@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { ClientModel, UpdateClientModel } from '../ClientModel'
+import type { ClientModel, UpdateClientModel } from '../SaleModel'
 import { Button, Col, Row, Modal } from 'antd'
 import {
   CheckOutlined,
