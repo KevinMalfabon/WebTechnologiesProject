@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateClientDto, GetClientsDto, UpdateClientDto } from './client.dto';
 import { ClientEntity } from './client.entity';
 import { ClientService } from './client.service';
@@ -13,8 +22,12 @@ export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
   @Get()
-  async getClients(@Query() input: GetClientsDto): Promise<PaginatedResponse<ClientEntity>> {
-    const [property, rawDirection] = input.sort ? input.sort.split(',') : ['lastName', 'ASC'];
+  async getClients(
+    @Query() input: GetClientsDto,
+  ): Promise<PaginatedResponse<ClientEntity>> {
+    const [property, rawDirection] = input.sort
+      ? input.sort.split(',')
+      : ['lastName', 'ASC'];
     const direction: 'ASC' | 'DESC' = rawDirection === 'DESC' ? 'DESC' : 'ASC';
 
     const [clients, totalCount] = await this.clientService.getAllClients(
@@ -38,7 +51,10 @@ export class ClientController {
   }
 
   @Patch(':id')
-  updateClient(@Param('id') id: string, @Body() dto: UpdateClientDto): Promise<ClientEntity> {
+  updateClient(
+    @Param('id') id: string,
+    @Body() dto: UpdateClientDto,
+  ): Promise<ClientEntity> {
     return this.clientService.updateClient(id, dto);
   }
 
