@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { CreateClientModel } from '../ClientModel'
+import type { CreateClientModel } from '../SaleModel'
 import { Button, Input, Modal, Space } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 

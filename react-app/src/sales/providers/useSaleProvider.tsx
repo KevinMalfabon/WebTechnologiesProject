@@ -4,7 +4,7 @@ import type {
   ClientModel,
   CreateClientModel,
   UpdateClientModel,
-} from '../ClientModel'
+} from '../SaleModel'
 
 export const useClientProvider = () => {
   const [clients, setClients] = useState<ClientModel[]>([])
