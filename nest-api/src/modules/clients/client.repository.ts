@@ -31,7 +31,10 @@ export class ClientRepository {
     return this.repo.save(entity);
   }
 
-  async updateById(id: string, patch: Partial<ClientEntity>): Promise<ClientEntity | null> {
+  async updateById(
+    id: string,
+    patch: Partial<ClientEntity>,
+  ): Promise<ClientEntity | null> {
     await this.repo.update({ id }, patch);
     return this.findById(id);
   }
