@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
-import type { ClientModel } from '../ClientModel'
+import type { ClientModel } from '../SaleModel'
 
 export const useClientDetailsProvider = (id: string) => {
   const [client, setClient] = useState<ClientModel | undefined>(undefined)

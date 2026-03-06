@@ -1,5 +1,5 @@
 import { Outlet } from '@tanstack/react-router'
-import { ClientList } from '../components/ClientList'
+import { ClientList } from '../components/SaleList'
 
 export function ClientsPage() {
   return (
