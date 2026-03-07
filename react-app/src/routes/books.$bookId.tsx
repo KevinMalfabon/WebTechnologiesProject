@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { BookDetails } from '../books/components/BookDetails'
+import { BookDetails } from '../domains/books/BookDetails'
 
 export const Route = createFileRoute('/books/$bookId')({
   component: BookDetailsPage,
