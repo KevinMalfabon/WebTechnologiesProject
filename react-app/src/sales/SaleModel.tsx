@@ -1,16 +1,23 @@
-export type ClientModel = {
+export type SaleModel = {
   id: string
-  firstName: string
-  lastName: string
-  email: string | null
-  pictureUrl: string | null
+  clientId: string
+  bookId: string
+  purchasedAt: string
+  client?: {
+    id: string
+    firstName: string
+    lastName: string
+  }
+  book?: {
+    id: string
+    title: string
+  }
 }
 
-export type CreateClientModel = {
-  firstName: string
-  lastName: string
-  email?: string
-  pictureUrl?: string
+export type CreateSaleModel = {
+  clientId: string
+  bookId: string
+  purchasedAt: string
 }
 
-export type UpdateClientModel = Partial<CreateClientModel>
+export type UpdateSaleModel = Partial<CreateSaleModel>
