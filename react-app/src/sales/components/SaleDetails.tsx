@@ -1,5 +1,5 @@
 import { Skeleton, Space, Typography } from 'antd'
-import { useClientDetailsProvider } from '../providers/useClientDetailsProvider'
+import { useClientDetailsProvider } from '../providers/useSaleDetailsProvider'
 import { useEffect } from 'react'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
