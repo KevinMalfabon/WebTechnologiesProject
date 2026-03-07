@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import type { BookModel } from '../BookModel'
+import type { BookModel, UpdateBookModel } from '../BookModel'
+import axios from 'axios'
 
 export const useBookDetailsProvider = (id: string) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -13,5 +14,16 @@ export const useBookDetailsProvider = (id: string) => {
       .finally(() => setIsLoading(false))
   }
 
-  return { isLoading, book, loadBook }
+  const updateBook = async (input: UpdateBookModel) => {
+    setIsLoading(true)
+    try {
+      await axios.patch(`http://localhost:3000/books/${id}`, input)
+      loadBook() // reload data on successful update
+    } catch (err) {
+      console.error(err)
+      setIsLoading(false)
+    }
+  }
+
+  return { isLoading, book, loadBook, updateBook }
 }
