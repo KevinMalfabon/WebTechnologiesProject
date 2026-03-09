@@ -1,28 +1,77 @@
-import { useState } from 'react'
-import type { CreateClientModel } from '../SaleModel'
-import { Button, Input, Modal, Space } from 'antd'
+import { useEffect, useState } from 'react'
+import type { CreateSaleModel } from '../SaleModel'
+import { Button, DatePicker, Modal, Select, Space } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
+import axios from 'axios'
+import dayjs from 'dayjs'
 
-interface CreateClientModalProps {
-  onCreate: (client: CreateClientModel) => void
+interface CreateSaleModalProps {
+  onCreate: (sale: CreateSaleModel) => void
 }
 
-export function CreateClientModal({ onCreate }: CreateClientModalProps) {
+type ClientOption = {
+  id: string
+  firstName: string
+  lastName: string
+}
+
+type BookOption = {
+  id: string
+  title: string
+}
+
+export function CreateSaleModal({ onCreate }: CreateSaleModalProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [pictureUrl, setPictureUrl] = useState('')
+
+  const [clientId, setClientId] = useState('')
+  const [bookId, setBookId] = useState('')
+  const [purchasedAt, setPurchasedAt] = useState('')
+
+  const [clients, setClients] = useState<ClientOption[]>([])
+  const [books, setBooks] = useState<BookOption[]>([])
+  const [isLoadingClients, setIsLoadingClients] = useState(false)
+  const [isLoadingBooks, setIsLoadingBooks] = useState(false)
+
+  const loadClients = () => {
+    setIsLoadingClients(true)
+    axios
+      .get('http://localhost:3000/clients?limit=100&offset=0&sort=lastName,ASC')
+      .then(res => {
+        setClients(res.data.data ?? [])
+      })
+      .catch(err => console.error(err))
+      .finally(() => setIsLoadingClients(false))
+  }
+
+  const loadBooks = () => {
+    setIsLoadingBooks(true)
+    axios
+      .get('http://localhost:3000/books?limit=100&offset=0&sort=title,ASC')
+      .then(res => {
+        setBooks(res.data.data ?? [])
+      })
+      .catch(err => console.error(err))
+      .finally(() => setIsLoadingBooks(false))
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      loadClients()
+      loadBooks()
+    }
+  }, [isOpen])
 
   const onClose = () => {
-    setFirstName('')
-    setLastName('')
-    setEmail('')
-    setPictureUrl('')
+    setClientId('')
+    setBookId('')
+    setPurchasedAt('')
     setIsOpen(false)
   }
 
-  const canCreate = firstName.trim().length > 0 && lastName.trim().length > 0
+  const canCreate =
+    clientId.trim().length > 0 &&
+    bookId.trim().length > 0 &&
+    purchasedAt.trim().length > 0
 
   return (
     <>
@@ -31,7 +80,7 @@ export function CreateClientModal({ onCreate }: CreateClientModalProps) {
         type="primary"
         onClick={() => setIsOpen(true)}
       >
-        Create Client
+        Create Sale
       </Button>
 
       <Modal
@@ -39,37 +88,50 @@ export function CreateClientModal({ onCreate }: CreateClientModalProps) {
         onCancel={onClose}
         onOk={() => {
           onCreate({
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
-            email: email.trim().length ? email.trim() : undefined,
-            pictureUrl: pictureUrl.trim().length
-              ? pictureUrl.trim()
-              : undefined,
+            clientId,
+            bookId,
+            purchasedAt,
           })
           onClose()
         }}
         okButtonProps={{ disabled: !canCreate }}
+        title="Create sale"
       >
-        <Space direction="vertical" style={{ width: '100%' }}>
-          <Input
-            placeholder="First name"
-            value={firstName}
-            onChange={e => setFirstName(e.target.value)}
+        <Space direction="vertical" style={{ width: '100%' }} size="middle">
+          <Select
+            placeholder="Select a client"
+            value={clientId || undefined}
+            onChange={value => setClientId(value)}
+            loading={isLoadingClients}
+            style={{ width: '100%' }}
+            options={clients.map(client => ({
+              value: client.id,
+              label: `${client.firstName} ${client.lastName}`,
+            }))}
+            showSearch
+            optionFilterProp="label"
           />
-          <Input
-            placeholder="Last name"
-            value={lastName}
-            onChange={e => setLastName(e.target.value)}
+
+          <Select
+            placeholder="Select a book"
+            value={bookId || undefined}
+            onChange={value => setBookId(value)}
+            loading={isLoadingBooks}
+            style={{ width: '100%' }}
+            options={books.map(book => ({
+              value: book.id,
+              label: book.title,
+            }))}
+            showSearch
+            optionFilterProp="label"
           />
-          <Input
-            placeholder="Email (optional)"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-          <Input
-            placeholder="Picture URL (optional)"
-            value={pictureUrl}
-            onChange={e => setPictureUrl(e.target.value)}
+
+          <DatePicker
+            placeholder="Select purchase date"
+            style={{ width: '100%' }}
+            onChange={date => {
+              setPurchasedAt(date ? dayjs(date).format('YYYY-MM-DD') : '')
+            }}
           />
         </Space>
       </Modal>
