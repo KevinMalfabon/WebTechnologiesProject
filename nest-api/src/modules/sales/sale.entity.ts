@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { BookEntity, type BookId } from '../books/entities/book.entity';
+import { BookEntity } from '../books/entities/book.entity';
 import { ClientEntity } from '../clients/client.entity';
 
 export type SaleId = string & { __brand: 'Sale' };
@@ -24,7 +24,7 @@ export class SaleEntity extends BaseEntity {
   client: ClientEntity;
 
   @Column({ name: 'book_id', type: 'uuid' })
-  bookId: BookId;
+  bookId: string;
 
   @ManyToOne(() => BookEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'book_id' })

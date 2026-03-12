@@ -10,6 +10,9 @@ import { BookOutlined, HomeOutlined, InfoOutlined } from '@ant-design/icons'
 import { TeamOutlined } from '@ant-design/icons'
 import Menu from 'antd/es/menu/menu'
 
+// shared components
+import { AppBreadcrumb } from './shared/components/AppBreadcrumb'
+
 interface LayoutProps {
   children: React.ReactNode
 }
@@ -62,7 +65,10 @@ export function Layout({ children }: LayoutProps) {
         <h2 style={{ marginTop: '0' }}>Babel&apos;s Library</h2>
         <Menu mode="horizontal" items={items} />
       </div>
-      <div style={{ width: '100%', overflowY: 'scroll' }}>{children}</div>
+      <div style={{ width: '100%', overflowY: 'scroll' }}>
+        <AppBreadcrumb />
+        {children}
+      </div>
     </Space>
   )
 }
