@@ -20,12 +20,18 @@ export class SaleRepository {
     private readonly clientRepository: Repository<ClientEntity>,
     @InjectRepository(BookEntity)
     private readonly bookRepository: Repository<BookEntity>,
-  ) {}
+  ) { }
 
   public async getAllSales(
     input?: FilterSalesModel,
   ): Promise<[SaleModel[], number]> {
+    const where: any = {};
+    if (input?.clientId) {
+      where.clientId = input.clientId;
+    }
+
     const [sales, totalCount] = await this.saleRepository.findAndCount({
+      where,
       take: input?.limit,
       skip: input?.offset,
       relations: {

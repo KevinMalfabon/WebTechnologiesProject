@@ -46,4 +46,8 @@ export class GetSalesDto {
   @IsString()
   @IsOptional()
   sort?: string;
+
+  @IsUUID(4)
+  @IsOptional()
+  clientId?: string;
 }

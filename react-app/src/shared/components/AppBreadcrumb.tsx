@@ -1,4 +1,3 @@
-import React from 'react'
 import { Breadcrumb } from 'antd'
 import {
   HomeOutlined,
@@ -7,8 +6,7 @@ import {
   UserOutlined,
   InfoOutlined,
 } from '@ant-design/icons'
-import { Link, useMatches, type RouteMatch } from '@tanstack/react-router'
-
+import { useMatches, type RouteMatch } from '@tanstack/react-router'
 
 type AnyParams = Record<string, string | undefined>
 
@@ -22,7 +20,7 @@ type AnyRouteMatch = RouteMatch<
   unknown // loader deps
 >
 
-export function AppBreadcrumb(): JSX.Element {
+export function AppBreadcrumb() {
   const matches = useMatches() as AnyRouteMatch[]
 
   // only show the current route in the menu of the breadcrumb
@@ -37,7 +35,7 @@ export function AppBreadcrumb(): JSX.Element {
     const isAbout = last.pathname === '/about'
     const dyn = last.params && Object.values(last.params)[0]
 
-    let titleNode = (
+    const titleNode = (
       <span>
         {isHome && (
           <>

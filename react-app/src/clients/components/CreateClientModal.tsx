@@ -12,13 +12,13 @@ export function CreateClientModal({ onCreate }: CreateClientModalProps) {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
-  const [pictureUrl, setPictureUrl] = useState('')
+  const [picture, setPicture] = useState('')
 
   const onClose = () => {
     setFirstName('')
     setLastName('')
     setEmail('')
-    setPictureUrl('')
+    setPicture('')
     setIsOpen(false)
   }
 
@@ -42,8 +42,8 @@ export function CreateClientModal({ onCreate }: CreateClientModalProps) {
             firstName: firstName.trim(),
             lastName: lastName.trim(),
             email: email.trim().length ? email.trim() : undefined,
-            pictureUrl: pictureUrl.trim().length
-              ? pictureUrl.trim()
+            picture: picture.trim().length
+              ? picture.trim()
               : undefined,
           })
           onClose()
@@ -68,8 +68,8 @@ export function CreateClientModal({ onCreate }: CreateClientModalProps) {
           />
           <Input
             placeholder="Picture URL (optional)"
-            value={pictureUrl}
-            onChange={e => setPictureUrl(e.target.value)}
+            value={picture}
+            onChange={e => setPicture(e.target.value)}
           />
         </Space>
       </Modal>
