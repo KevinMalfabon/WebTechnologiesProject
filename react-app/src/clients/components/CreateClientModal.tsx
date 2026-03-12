@@ -42,9 +42,7 @@ export function CreateClientModal({ onCreate }: CreateClientModalProps) {
             firstName: firstName.trim(),
             lastName: lastName.trim(),
             email: email.trim().length ? email.trim() : undefined,
-            picture: picture.trim().length
-              ? picture.trim()
-              : undefined,
+            picture: picture.trim().length ? picture.trim() : undefined,
           })
           onClose()
         }}

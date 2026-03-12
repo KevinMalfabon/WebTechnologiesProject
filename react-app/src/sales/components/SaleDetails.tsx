@@ -24,14 +24,14 @@ export const SaleDetails = ({ id }: SaleDetailsProps) => {
         <ArrowLeftOutlined />
       </Link>
 
-      <Typography.Title level={1}>
-        Detalles de Venta
+      <Typography.Title level={1}>Sale Details</Typography.Title>
+
+      <Typography.Title level={4}>
+        Book: {sale?.book?.title ?? '—'}
       </Typography.Title>
 
-      <Typography.Title level={4}>Libro: {sale?.book?.title ?? '—'}</Typography.Title>
-
       <Typography.Text type="secondary">
-        Cliente: {sale?.client?.firstName} {sale?.client?.lastName}
+        Client: {sale?.client?.firstName} {sale?.client?.lastName}
       </Typography.Text>
     </Space>
   )

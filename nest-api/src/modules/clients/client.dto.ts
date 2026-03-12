@@ -6,6 +6,7 @@ import {
   IsUrl,
   Max,
   Min,
+  ValidateIf,
 } from 'class-validator';
 
 export class CreateClientDto {
@@ -19,6 +20,7 @@ export class CreateClientDto {
   @IsEmail()
   email?: string;
 
+  @ValidateIf((e) => e.picture !== '')
   @IsOptional()
   @IsUrl()
   picture?: string;
@@ -37,6 +39,7 @@ export class UpdateClientDto {
   @IsEmail()
   email?: string;
 
+  @ValidateIf((e) => e.picture !== '')
   @IsOptional()
   @IsUrl()
   picture?: string;

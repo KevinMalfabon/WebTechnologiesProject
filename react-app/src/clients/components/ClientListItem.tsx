@@ -9,7 +9,7 @@ import {
   UserOutlined,
   BookOutlined,
 } from '@ant-design/icons'
-import { Link } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 
 interface ClientListItemProps {
   client: ClientModel
@@ -27,9 +27,9 @@ export function ClientListItem({
   const [email, setEmail] = useState(client.email ?? '')
   const [picture, setPicture] = useState(client.picture ?? '')
   const [isEditing, setIsEditing] = useState(false)
-
-  // ✅ NEW: state for delete confirm modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  
+  const navigate = useNavigate()
 
   const onCancelEdit = () => {
     setIsEditing(false)
@@ -44,7 +44,7 @@ export function ClientListItem({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: email.trim().length ? email.trim() : undefined,
-      picture: picture.trim().length ? picture.trim() : undefined,
+      picture: picture.trim().length ? picture.trim() : '',
     })
     setIsEditing(false)
   }
@@ -66,6 +66,12 @@ export function ClientListItem({
           display: 'flex',
           justifyContent: 'space-between',
           transition: 'box-shadow 0.3s',
+          cursor: isEditing ? 'default' : 'pointer',
+        }}
+        onClick={() => {
+          if (!isEditing) {
+            navigate({ to: '/clients/$clientId', params: { clientId: client.id } })
+          }
         }}
         onMouseEnter={e => {
           e.currentTarget.style.boxShadow = '0 4px 12px 0 rgba(0, 0, 0, 0.05)'
@@ -74,7 +80,10 @@ export function ClientListItem({
           e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.03)'
         }}
       >
-        <Col span={7} style={{ margin: 'auto 0', display: 'flex', alignItems: 'center' }}>
+        <Col
+          span={7}
+          style={{ margin: 'auto 0', display: 'flex', alignItems: 'center' }}
+        >
           {isEditing ? (
             <div style={{ marginRight: '1rem' }} />
           ) : (
@@ -100,15 +109,18 @@ export function ClientListItem({
               />
             </div>
           ) : (
-            <Link
-              to={`/clients/$clientId`}
-              params={{ clientId: client.id }}
-              style={{ textAlign: 'left', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}
+            <div
+              style={{
+                textAlign: 'left',
+                display: 'flex',
+                alignItems: 'center',
+                whiteSpace: 'nowrap',
+              }}
             >
               <span style={{ fontWeight: '500', color: '#1f1f1f' }}>
                 {client.firstName} {client.lastName}
               </span>
-            </Link>
+            </div>
           )}
         </Col>
 
@@ -137,11 +149,20 @@ export function ClientListItem({
         )}
 
         {!isEditing && (
-          <Col span={5} style={{ margin: 'auto 0', textAlign: 'left', display: 'flex', alignItems: 'center' }}>
-             <BookOutlined style={{ marginRight: '0.5rem', color: '#8c8c8c' }} />
-             <span style={{ color: '#595959', fontSize: '0.9em' }}>
-               {client.purchasedBooksCount ?? 0} {client.purchasedBooksCount === 1 ? 'libro' : 'libros'}
-             </span>
+          <Col
+            span={5}
+            style={{
+              margin: 'auto 0',
+              textAlign: 'left',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <BookOutlined style={{ marginRight: '0.5rem', color: '#8c8c8c' }} />
+            <span style={{ color: '#595959', fontSize: '0.9em' }}>
+              {client.purchasedBooksCount ?? 0}{' '}
+              {client.purchasedBooksCount === 1 ? 'book' : 'books'}
+            </span>
           </Col>
         )}
 
@@ -169,23 +190,30 @@ export function ClientListItem({
               </Button>
             </>
           ) : (
-            <Button type="primary" onClick={() => setIsEditing(true)}>
+            <Button 
+              type="primary" 
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsEditing(true)
+              }}
+            >
               <EditOutlined />
             </Button>
           )}
 
-          {/* ✅ CHANGED: open modal instead of deleting directly */}
           <Button
             type="primary"
             danger
-            onClick={() => setIsDeleteModalOpen(true)}
+            onClick={(e) => {
+              e.stopPropagation()
+              setIsDeleteModalOpen(true)
+            }}
           >
             <DeleteOutlined />
           </Button>
         </Col>
       </Row>
 
-      {/* ✅ NEW: Confirmation modal */}
       <Modal
         title="Delete this client?"
         open={isDeleteModalOpen}

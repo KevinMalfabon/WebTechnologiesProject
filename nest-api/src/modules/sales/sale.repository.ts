@@ -20,7 +20,7 @@ export class SaleRepository {
     private readonly clientRepository: Repository<ClientEntity>,
     @InjectRepository(BookEntity)
     private readonly bookRepository: Repository<BookEntity>,
-  ) { }
+  ) {}
 
   public async getAllSales(
     input?: FilterSalesModel,
@@ -36,7 +36,9 @@ export class SaleRepository {
       skip: input?.offset,
       relations: {
         client: true,
-        book: true,
+        book: {
+          author: true,
+        },
       },
       order: input?.sort,
     });
