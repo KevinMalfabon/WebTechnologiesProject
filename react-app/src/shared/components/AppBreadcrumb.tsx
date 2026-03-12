@@ -10,7 +10,6 @@ import {
 } from '@ant-design/icons'
 import { Link, useMatches, type RouteMatch } from '@tanstack/react-router'
 
-
 type AnyParams = Record<string, string | undefined>
 
 type AnyRouteMatch = RouteMatch<
@@ -31,8 +30,81 @@ export function AppBreadcrumb(): JSX.Element {
   // build a breadcrumb list from all route matches so the user can
   // see the full path (e.g. “Books > 1234-uuid”) instead of only the
   // current segment.  Home is shown only on the root page.
+  const [labelCache, setLabelCache] = React.useState<Record<string, string>>( {})
   const breadcrumbItems: Array<{ key: string; title: React.ReactNode }> = []
-  const last = matches[matches.length - 1]
+
+  // fetch display names for any param-based routes we encounter.  store
+  // by a composite key (type-id) so books/123 and clients/123 don't clash.
+  React.useEffect(() => {
+    matches.forEach(m => {
+      if (m.params) {
+        const { bookId, clientId, saleId } = m.params as {
+          bookId?: string
+          clientId?: string
+          saleId?: string
+        }
+
+        if (bookId) {
+          const key = `book-${bookId}`
+          if (!labelCache[key]) {
+            fetch(`http://localhost:3000/books/${bookId}`)
+              .then(r => r.json())
+              .then(d => {
+                if (d && d.title) {
+                  setLabelCache(prev => ({ ...prev, [key]: d.title }))
+                }
+              })
+              .catch(() => {})
+          }
+        }
+
+        if (clientId) {
+          const key = `client-${clientId}`
+          if (!labelCache[key]) {
+            fetch(`http://localhost:3000/clients/${clientId}`)
+              .then(r => r.json())
+              .then(d => {
+                if (d && (d.firstName || d.lastName)) {
+                  setLabelCache(prev => ({
+                    ...prev,
+                    [key]: `${d.firstName ?? ''} ${d.lastName ?? ''}`.trim(),
+                  }))
+                }
+              })
+              .catch(() => {})
+          }
+        }
+
+        if (saleId) {
+          const key = `sale-${saleId}`
+          if (!labelCache[key]) {
+            fetch(`http://localhost:3000/sales/${saleId}`)
+              .then(r => r.json())
+              .then(d => {
+                if (d) {
+                  const label =
+                    d.client && d.client.firstName
+                      ? `${d.client.firstName} ${d.client.lastName}`
+                      : saleId
+                  setLabelCache(prev => ({ ...prev, [key]: label }))
+                }
+              })
+              .catch(() => {})
+          }
+        }
+      }
+    })
+  }, [matches, labelCache])
+
+  // always include home at the start so users can jump back
+  breadcrumbItems.push({
+    key: 'home',
+    title: (
+      <Link to="/">
+        <HomeOutlined /> Home
+      </Link>
+    ),
+  })
 
   matches.forEach((m, idx) => {
     const isHome = m.pathname === '/'
@@ -41,7 +113,28 @@ export function AppBreadcrumb(): JSX.Element {
     const isAuthors = m.pathname.startsWith('/authors')
     const isSales = m.pathname.startsWith('/sales')
     const isAbout = m.pathname === '/about'
-    const dyn = m.params && Object.values(m.params)[0]
+
+    // dynamic value: prefer fetched label, otherwise raw param value
+    let dyn: string | undefined
+    if (m.params) {
+      // narrow the params to our known keys so we don't need `any`
+      const params = m.params as {
+        bookId?: string
+        clientId?: string
+        saleId?: string
+      }
+
+      if (params.bookId) {
+        const key = `book-${params.bookId}`
+        dyn = labelCache[key] || params.bookId
+      } else if (params.clientId) {
+        const key = `client-${params.clientId}`
+        dyn = labelCache[key] || params.clientId
+      } else if (params.saleId) {
+        const key = `sale-${params.saleId}`
+        dyn = labelCache[key] || params.saleId
+      }
+    }
 
     let titleNode: React.ReactNode = (
       <span>
@@ -84,8 +177,8 @@ export function AppBreadcrumb(): JSX.Element {
       titleNode = <Link to={m.pathname}>{titleNode}</Link>
     }
 
-    // do not include the root if we have other segments; otherwise keep it
-    if (isHome && matches.length > 1) {
+    // we already added home manually above; skip the automatic home entry
+    if (isHome) {
       return
     }
 
