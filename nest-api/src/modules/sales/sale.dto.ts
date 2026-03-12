@@ -7,14 +7,13 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import type { BookId } from '../books/entities/book.entity';
 
 export class CreateSaleDto {
   @IsUUID(4)
   clientId: string;
 
   @IsUUID(4)
-  bookId: BookId;
+  bookId: string;
 
   @IsDateString()
   purchasedAt: string;
@@ -27,7 +26,7 @@ export class UpdateSaleDto {
 
   @IsUUID(4)
   @IsOptional()
-  bookId?: BookId;
+  bookId?: string;
 
   @IsDateString()
   @IsOptional()

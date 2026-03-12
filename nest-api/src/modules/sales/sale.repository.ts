@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClientEntity } from '../clients/client.entity';
-import { BookEntity, type bookId } from '../books/entities/book.entity';
+import { BookEntity } from '../books/entities/book.entity';
 import {
   CreateSaleModel,
   FilterSalesModel,
@@ -64,7 +64,7 @@ export class SaleRepository {
     }
 
     const book = await this.bookRepository.findOne({
-      where: { id: sale.bookId },
+      where: { id: sale.bookId as BookEntity['id'] }, // Ensure type compatibility
     });
 
     if (!book) {
@@ -110,7 +110,7 @@ export class SaleRepository {
 
     if (sale.bookId) {
       const book = await this.bookRepository.findOne({
-        where: { id: sale.bookId },
+        where: { id: sale.bookId as BookEntity['id'] },
       });
 
       if (!book) {
