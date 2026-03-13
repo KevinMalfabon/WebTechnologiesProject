@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClientEntity } from '../clients/client.entity';
-import { BookEntity, type bookId } from '../books/entities/book.entity';
+import { BookEntity } from '../books/entities/book.entity';
 import {
   CreateSaleModel,
   FilterSalesModel,
@@ -25,12 +25,20 @@ export class SaleRepository {
   public async getAllSales(
     input?: FilterSalesModel,
   ): Promise<[SaleModel[], number]> {
+    const where: any = {};
+    if (input?.clientId) {
+      where.clientId = input.clientId;
+    }
+
     const [sales, totalCount] = await this.saleRepository.findAndCount({
+      where,
       take: input?.limit,
       skip: input?.offset,
       relations: {
         client: true,
-        book: true,
+        book: {
+          author: true,
+        },
       },
       order: input?.sort,
     });
@@ -64,7 +72,7 @@ export class SaleRepository {
     }
 
     const book = await this.bookRepository.findOne({
-      where: { id: sale.bookId },
+      where: { id: sale.bookId as BookEntity['id'] }, // Ensure type compatibility
     });
 
     if (!book) {
@@ -110,7 +118,7 @@ export class SaleRepository {
 
     if (sale.bookId) {
       const book = await this.bookRepository.findOne({
-        where: { id: sale.bookId },
+        where: { id: sale.bookId as BookEntity['id'] },
       });
 
       if (!book) {
