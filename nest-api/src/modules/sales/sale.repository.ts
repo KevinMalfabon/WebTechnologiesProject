@@ -25,9 +25,12 @@ export class SaleRepository {
   public async getAllSales(
     input?: FilterSalesModel,
   ): Promise<[SaleModel[], number]> {
-    const where: any = {};
+    const where: Record<string, string> = {};
     if (input?.clientId) {
       where.clientId = input.clientId;
+    }
+    if (input?.bookId) {
+      where.bookId = input.bookId;
     }
 
     const [sales, totalCount] = await this.saleRepository.findAndCount({

@@ -9,6 +9,7 @@ export type BookModel = {
   }
   coverUrl?: string
   description?: string
+  salesCount?: number
 }
 
 export type CreateBookModel = {

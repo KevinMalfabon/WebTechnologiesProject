@@ -12,6 +12,7 @@ export type BookModel = {
   yearPublished: number;
   coverUrl?: string;
   description?: string;
+  salesCount?: number;
 };
 
 export type CreateBookModel = {
