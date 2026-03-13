@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type JSX } from 'react'
 import { Breadcrumb } from 'antd'
 import {
   HomeOutlined,
@@ -11,6 +11,12 @@ import {
 import { Link, useMatches, type RouteMatch } from '@tanstack/react-router'
 
 type AnyParams = Record<string, string | undefined>
+
+type RouteParams = {
+  bookId?: string
+  clientId?: string
+  saleId?: string
+}
 
 type AnyRouteMatch = RouteMatch<
   string, // route id
@@ -30,7 +36,7 @@ export function AppBreadcrumb(): JSX.Element {
   // build a breadcrumb list from all route matches so the user can
   // see the full path (e.g. “Books > 1234-uuid”) instead of only the
   // current segment.  Home is shown only on the root page.
-  const [labelCache, setLabelCache] = React.useState<Record<string, string>>( {})
+  const [labelCache, setLabelCache] = React.useState<Record<string, string>>({})
   const breadcrumbItems: Array<{ key: string; title: React.ReactNode }> = []
 
   // fetch display names for any param-based routes we encounter.  store
@@ -38,11 +44,7 @@ export function AppBreadcrumb(): JSX.Element {
   React.useEffect(() => {
     matches.forEach(m => {
       if (m.params) {
-        const { bookId, clientId, saleId } = m.params as {
-          bookId?: string
-          clientId?: string
-          saleId?: string
-        }
+        const { bookId, clientId, saleId } = m.params as RouteParams
 
         if (bookId) {
           const key = `book-${bookId}`
@@ -106,84 +108,110 @@ export function AppBreadcrumb(): JSX.Element {
     ),
   })
 
-  matches.forEach((m, idx) => {
-    const isHome = m.pathname === '/'
-    const isBooks = m.pathname.startsWith('/books')
-    const isClients = m.pathname.startsWith('/clients')
-    const isAuthors = m.pathname.startsWith('/authors')
-    const isSales = m.pathname.startsWith('/sales')
-    const isAbout = m.pathname === '/about'
+  // Get the current match (last one)
+  const currentMatch = matches[matches.length - 1]
+  if (!currentMatch || currentMatch.pathname === '/') {
+    // Only home, already added
+  } else {
+    const isBooks = currentMatch.pathname.startsWith('/books')
+    const isClients = currentMatch.pathname.startsWith('/clients')
+    const isAuthors = currentMatch.pathname.startsWith('/authors')
+    const isSales = currentMatch.pathname.startsWith('/sales')
+    const isAbout = currentMatch.pathname === '/about'
 
-    // dynamic value: prefer fetched label, otherwise raw param value
-    let dyn: string | undefined
-    if (m.params) {
-      // narrow the params to our known keys so we don't need `any`
-      const params = m.params as {
-        bookId?: string
-        clientId?: string
-        saleId?: string
+    // Add the section breadcrumb
+    let sectionTitle: React.ReactNode = null
+    let listPath = currentMatch.pathname
+    if (isBooks) {
+      sectionTitle = (
+        <span>
+          <BookOutlined /> Books
+        </span>
+      )
+      if (currentMatch.params && (currentMatch.params as RouteParams).bookId) {
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
       }
+    } else if (isClients) {
+      sectionTitle = (
+        <span>
+          <TeamOutlined /> Clients
+        </span>
+      )
+      if (
+        currentMatch.params &&
+        (currentMatch.params as RouteParams).clientId
+      ) {
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
+      }
+    } else if (isAuthors) {
+      sectionTitle = (
+        <span>
+          <UserOutlined /> Authors
+        </span>
+      )
+    } else if (isSales) {
+      sectionTitle = (
+        <span>
+          <ShoppingCartOutlined /> Sales
+        </span>
+      )
+      if (currentMatch.params && (currentMatch.params as RouteParams).saleId) {
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
+      }
+    } else if (isAbout) {
+      sectionTitle = (
+        <span>
+          <InfoOutlined /> About
+        </span>
+      )
+    }
+
+    if (sectionTitle) {
+      breadcrumbItems.push({
+        key: 'section',
+        title: <Link to={listPath}>{sectionTitle}</Link>,
+      })
+    }
+
+    // Add dynamic name if it's a detail page
+    if (currentMatch.params) {
+      const params = currentMatch.params as RouteParams
+      let dyn: string | undefined
+      let key: string
 
       if (params.bookId) {
-        const key = `book-${params.bookId}`
+        key = `book-${params.bookId}`
         dyn = labelCache[key] || params.bookId
       } else if (params.clientId) {
-        const key = `client-${params.clientId}`
+        key = `client-${params.clientId}`
         dyn = labelCache[key] || params.clientId
       } else if (params.saleId) {
-        const key = `sale-${params.saleId}`
+        key = `sale-${params.saleId}`
         dyn = labelCache[key] || params.saleId
       }
+
+      if (dyn) {
+        breadcrumbItems.push({
+          key: 'detail',
+          title: <span>{dyn}</span>,
+        })
+      }
     }
+  }
 
-    let titleNode: React.ReactNode = (
-      <span>
-        {isHome && (
-          <>
-            <HomeOutlined /> Home
-          </>
-        )}
-        {isBooks && (
-          <>
-            <BookOutlined /> Books
-          </>
-        )}
-        {isClients && (
-          <>
-            <TeamOutlined /> Clients
-          </>
-        )}
-        {isAuthors && (
-          <>
-            <UserOutlined /> Authors
-          </>
-        )}
-        {isSales && (
-          <>
-            <ShoppingCartOutlined /> Sales
-          </>
-        )}
-        {isAbout && (
-          <>
-            <InfoOutlined /> About
-          </>
-        )}
-        {dyn}
-      </span>
-    )
-
-    // make every crumb except the last clickable
-    if (idx !== matches.length - 1) {
-      titleNode = <Link to={m.pathname}>{titleNode}</Link>
-    }
-
-    // we already added home manually above; skip the automatic home entry
-    if (isHome) {
-      return
-    }
-
-    breadcrumbItems.push({ key: m.id, title: titleNode })
-  })
+  return (
+    <div
+      style={{
+        padding: '16px 24px 0',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        maxWidth: '100%',
+      }}
+    >
+      <Breadcrumb separator=">" items={breadcrumbItems} />
+    </div>
+  )
 
   return (
     <div

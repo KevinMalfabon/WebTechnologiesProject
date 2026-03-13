@@ -1,14 +1,13 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import { Route as indexRoute } from './routes/index'
 import { Route as aboutRoute } from './routes/about'
 import { Route as booksRoute } from './routes/books'
 import { Route as clientsRoute } from './routes/clients'
 import { ShoppingCartOutlined } from '@ant-design/icons'
 import { Route as salesRoute } from './routes/sales'
-import { Space, type MenuProps } from 'antd'
+import { Layout as AntLayout, Menu, Typography, type MenuProps } from 'antd'
 import { BookOutlined, HomeOutlined, InfoOutlined } from '@ant-design/icons'
 import { TeamOutlined } from '@ant-design/icons'
-import Menu from 'antd/es/menu/menu'
 
 // shared components
 import { AppBreadcrumb } from './shared/components/AppBreadcrumb'
@@ -17,7 +16,27 @@ interface LayoutProps {
   children: React.ReactNode
 }
 
+const { Header, Content } = AntLayout
+const { Title } = Typography
+
 export function Layout({ children }: LayoutProps) {
+  const location = useLocation()
+
+  let selectedKey: string
+  if (location.pathname === '/') {
+    selectedKey = 'home'
+  } else if (location.pathname.startsWith('/books')) {
+    selectedKey = 'books'
+  } else if (location.pathname.startsWith('/clients')) {
+    selectedKey = 'clients'
+  } else if (location.pathname.startsWith('/sales')) {
+    selectedKey = 'sales'
+  } else if (location.pathname === '/about') {
+    selectedKey = 'about'
+  } else {
+    selectedKey = 'home' // fallback
+  }
+
   const items: Required<MenuProps>['items'] = [
     {
       label: <Link to={indexRoute.to}>Home</Link>,
@@ -25,7 +44,7 @@ export function Layout({ children }: LayoutProps) {
       icon: <HomeOutlined />,
     },
     {
-      label: <  Link to={booksRoute.to}>Books</Link>,
+      label: <Link to={booksRoute.to}>Books</Link>,
       key: 'books',
       icon: <BookOutlined />,
     },
@@ -47,28 +66,33 @@ export function Layout({ children }: LayoutProps) {
   ]
 
   return (
-    <Space
-      direction="vertical"
-      style={{
-        width: '100%',
-        height: '100vh',
-      }}
-    >
-      <div
+    <AntLayout style={{ minHeight: '100vh' }}>
+      <Header
         style={{
-          textAlign: 'left',
-          width: '100%',
-          backgroundColor: '#395E66',
-          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 2rem',
+          background: '#fff', // Or leave it out to use the theme default
+          borderBottom: '1px solid #f0f0f0',
         }}
       >
-        <h2 style={{ marginTop: '0' }}>Babel&apos;s Library</h2>
-        <Menu mode="horizontal" items={items} />
-      </div>
-      <div style={{ width: '100%', overflowY: 'scroll' }}>
+        <Title level={4} style={{ margin: '0 2rem 0 0', whiteSpace: 'nowrap' }}>
+          Babel&apos;s Library
+        </Title>
+        <Menu
+          mode="horizontal"
+          selectedKeys={[selectedKey]}
+          items={items}
+          style={{ flex: 1, minWidth: 0, borderBottom: 'none' }}
+        />
+      </Header>
+
+      <Content style={{ padding: '0 2rem' }}>
         <AppBreadcrumb />
-        {children}
-      </div>
-    </Space>
+        <div style={{ background: '#fff', padding: '2rem', minHeight: 280 }}>
+          {children}
+        </div>
+      </Content>
+    </AntLayout>
   )
 }
