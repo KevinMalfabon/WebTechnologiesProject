@@ -27,6 +27,7 @@ export class BookEntity extends BaseEntity {
   authorId: AuthorId;
 
   @ManyToOne(() => AuthorEntity, { onDelete: 'CASCADE' })
+  
   @JoinColumn({ name: 'author_id' })
   author: AuthorEntity;
 
