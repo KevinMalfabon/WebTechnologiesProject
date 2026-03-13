@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { AuthorModel, UpdateAuthorModel } from '../AuthorModel'
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Input, Row } from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
@@ -15,17 +15,29 @@ interface AuthorListItemProps {
   onUpdate: (id: string, input: UpdateAuthorModel) => void
 }
 
-export function AuthorListItem({ book, onDelete, onUpdate }: AuthorListItemProps) {
-  const [title, setTitle] = useState(book.title)
+export function AuthorListItem({
+  author,
+  onDelete,
+  onUpdate,
+}: AuthorListItemProps) {
+  const [firstName, setFirstName] = useState(author.firstName)
+  const [lastName, setLastName] = useState(author.lastName)
+  const [info, setInfo] = useState(author.info)
   const [isEditing, setIsEditing] = useState(false)
 
   const onCancelEdit = () => {
     setIsEditing(false)
-    setTitle(book.title)
+    setFirstName(author.firstName)
+    setLastName(author.lastName)
+    setInfo(author.info)
   }
 
   const onValidateEdit = () => {
-    onUpdate(book.id, { title })
+    onUpdate(author.id, {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      info: info.trim(),
+    })
     setIsEditing(false)
   }
 
@@ -33,48 +45,73 @@ export function AuthorListItem({ book, onDelete, onUpdate }: AuthorListItemProps
     <Row
       style={{
         width: '100%',
-        height: '50px',
         borderRadius: '10px',
         backgroundColor: '#EEEEEE',
         margin: '1rem 0',
-        padding: '.25rem',
+        padding: '.75rem',
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center',
       }}
     >
-      <Col span={12} style={{ margin: 'auto 0' }}>
+      <Col span={16}>
         {isEditing ? (
-          <input value={title} onChange={e => setTitle(e.target.value)} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
+            <Input
+              placeholder="First Name"
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+            />
+            <Input
+              placeholder="Last Name"
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+            />
+            <Input
+              placeholder="Info"
+              value={info}
+              onChange={e => setInfo(e.target.value)}
+            />
+          </div>
         ) : (
           <Link
-            to={`/books/$bookId`}
-            params={{ bookId: book.id }}
+            to="/authors/$authorId"
+            params={{ authorId: author.id }}
             style={{
-              margin: 'auto 0',
               textAlign: 'left',
+              color: 'inherit',
             }}
           >
-            <span style={{ fontWeight: 'bold' }}>{book.title}</span> -{' '}
-            {book.yearPublished}
+            <div>
+              <span style={{ fontWeight: 'bold' }}>
+                {author.firstName} {author.lastName}
+              </span>
+            </div>
+            <div>{author.info}</div>
+            {author.bookCount !== undefined && (
+              <div>Books written: {author.bookCount}</div>
+            )}
           </Link>
         )}
       </Col>
-      <Col span={9} style={{ margin: 'auto 0' }}>
-        by <span style={{ fontWeight: 'bold' }}>{book.author.firstName}</span>{' '}
-        <span style={{ fontWeight: 'bold' }}>{book.author.lastName}</span>
-      </Col>
+
       <Col
-        span={3}
+        span={8}
         style={{
-          alignItems: 'right',
           display: 'flex',
+          justifyContent: 'flex-end',
           gap: '.25rem',
-          margin: 'auto 0',
         }}
       >
         {isEditing ? (
           <>
-            <Button type="primary" onClick={onValidateEdit}>
+            <Button
+              type="primary"
+              onClick={onValidateEdit}
+              disabled={
+                !firstName.trim() || !lastName.trim() || !info.trim()
+              }
+            >
               <CheckOutlined />
             </Button>
             <Button onClick={onCancelEdit}>
@@ -86,7 +123,8 @@ export function AuthorListItem({ book, onDelete, onUpdate }: AuthorListItemProps
             <EditOutlined />
           </Button>
         )}
-        <Button type="primary" danger onClick={() => onDelete(book.id)}>
+
+        <Button type="primary" danger onClick={() => onDelete(author.id)}>
           <DeleteOutlined />
         </Button>
       </Col>
