@@ -4,7 +4,7 @@ export type AuthorModel = {
   id: string;
   firstName: string;
   lastName: string;
-  info: string;
+  info?: string;
 };
 
 export type CreateAuthorModel = {

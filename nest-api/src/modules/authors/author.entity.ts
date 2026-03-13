@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, } from 'typeorm';
 
-export type AuthorId = string & { __brand: 'Author' };
+export type AuthorId = string;
 
 @Entity('authors')
 export class AuthorEntity extends BaseEntity {
@@ -13,8 +13,8 @@ export class AuthorEntity extends BaseEntity {
   @Column({ name: 'last_name', type: 'varchar' , length: 255})
   lastName: string;
 
-  @Column({ name: 'information', type: 'varchar' , length: 1000})
-  info: string;
+  @Column({ name: 'information', type: 'varchar', length: 1000, nullable: true, default: '' })
+  info?: string;
 
   //@Column({ name: 'book_count', type: 'int' })
   //bookCount: number | 0;
