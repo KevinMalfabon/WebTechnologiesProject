@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type JSX } from 'react'
 import { Breadcrumb } from 'antd'
 import {
   HomeOutlined,
@@ -36,7 +36,7 @@ export function AppBreadcrumb(): JSX.Element {
   // build a breadcrumb list from all route matches so the user can
   // see the full path (e.g. “Books > 1234-uuid”) instead of only the
   // current segment.  Home is shown only on the root page.
-  const [labelCache, setLabelCache] = React.useState<Record<string, string>>( {})
+  const [labelCache, setLabelCache] = React.useState<Record<string, string>>({})
   const breadcrumbItems: Array<{ key: string; title: React.ReactNode }> = []
 
   // fetch display names for any param-based routes we encounter.  store
@@ -147,7 +147,7 @@ export function AppBreadcrumb(): JSX.Element {
       sectionTitle = (
         <span>
           <UserOutlined /> Authors
-      </span>
+        </span>
       )
     } else if (isSales) {
       sectionTitle = (
@@ -203,18 +203,13 @@ export function AppBreadcrumb(): JSX.Element {
     <div
       style={{
         padding: '16px 24px 0',
-        backgroundColor: 'rgba(255,255,255,0.08)',
-        // ensure text and separators show up against the dark page
-        color: '#ffffff',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        maxWidth: '100%',
       }}
     >
-      <Breadcrumb
-        separator=">"
-        items={breadcrumbItems}
-        style={{
-          color: '#f0f0f0',
-        }}
-      />
+      <Breadcrumb separator=">" items={breadcrumbItems} />
     </div>
   )
 

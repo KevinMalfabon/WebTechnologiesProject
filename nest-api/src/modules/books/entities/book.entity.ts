@@ -4,9 +4,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AuthorEntity, type AuthorId } from '../../authors/author.entity';
+import { SaleEntity } from '../../sales/sale.entity';
 
 export type BookId = string & { __brand: 'Book' };
 
@@ -25,6 +27,7 @@ export class BookEntity extends BaseEntity {
   authorId: AuthorId;
 
   @ManyToOne(() => AuthorEntity, { onDelete: 'CASCADE' })
+  
   @JoinColumn({ name: 'author_id' })
   author: AuthorEntity;
 
@@ -33,4 +36,9 @@ export class BookEntity extends BaseEntity {
 
   @Column({ name: 'description', type: 'varchar', nullable: true })
   description?: string;
+
+  @OneToMany(() => SaleEntity, (sale) => sale.book)
+  sales: SaleEntity[];
+
+  salesCount?: number;
 }
