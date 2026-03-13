@@ -9,7 +9,7 @@ interface AuthorDetailsProps {
   id: string
 }
 
-export const BookDetails = ({ id }: AuthorDetailsProps) => {
+export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
   const { isLoading, author, loadAuthor } = useAuthorDetailsProvider(id)
 
   useEffect(() => {
