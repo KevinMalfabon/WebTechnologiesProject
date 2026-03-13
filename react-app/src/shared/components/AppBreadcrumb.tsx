@@ -129,7 +129,7 @@ export function AppBreadcrumb(): JSX.Element {
         </span>
       )
       if (currentMatch.params && (currentMatch.params as RouteParams).bookId) {
-        listPath = currentMatch.pathname.replace(/\/[^\/]+$/, '')
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
       }
     } else if (isClients) {
       sectionTitle = (
@@ -137,8 +137,11 @@ export function AppBreadcrumb(): JSX.Element {
           <TeamOutlined /> Clients
         </span>
       )
-      if (currentMatch.params && (currentMatch.params as RouteParams).clientId) {
-        listPath = currentMatch.pathname.replace(/\/[^\/]+$/, '')
+      if (
+        currentMatch.params &&
+        (currentMatch.params as RouteParams).clientId
+      ) {
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
       }
     } else if (isAuthors) {
       sectionTitle = (
