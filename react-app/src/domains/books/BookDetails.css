@@ -1,0 +1,277 @@
+.book-details-page {
+  background: #f5f5f7;
+  min-height: 100vh;
+  padding: 40px 24px;
+}
+
+.book-details-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Back link ── */
+.book-details-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #8e8e93;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.book-details-back:hover {
+  color: #007aff;
+}
+
+/* ── Card base ── */
+.bento-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 0;
+  box-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.04),
+    0 0 1px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+  position: relative;
+}
+
+.bento-card:hover {
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.08),
+    0 0 1px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* ── Card content area ── */
+.bento-card-content {
+  padding: 28px 28px 24px;
+}
+
+/* ── Card label (small caps header) ── */
+.bento-card-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #8e8e93;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Card value (primary text) ── */
+.bento-card-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: -0.4px;
+  line-height: 1.3;
+}
+
+/* ── Metric value (large number) ── */
+.bento-card-metric {
+  font-size: 48px;
+  font-weight: 800;
+  color: #1d1d1f;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+}
+
+/* ── Description text ── */
+.bento-card-description {
+  font-size: 15px;
+  color: #3a3a3c;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* ── Edit pencil button ── */
+.bento-edit-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #f5f5f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  color: #8e8e93;
+  font-size: 14px;
+  z-index: 2;
+}
+
+.bento-card:hover .bento-edit-btn {
+  background: #007aff;
+  color: #fff;
+}
+
+/* ── Save / Cancel row ── */
+.bento-edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* ── Cover image ── */
+.bento-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bento-cover-fallback {
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  background: linear-gradient(145deg, #e8e0f0 0%, #d4e4f7 50%, #e0ecf8 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #8e8e93;
+}
+
+/* ── Action bar ── */
+.book-details-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.book-details-delete-btn {
+  border-radius: 14px !important;
+  height: 44px !important;
+  padding: 0 20px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  border: none !important;
+  background: #fff !important;
+  color: #ff3b30 !important;
+  box-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.04),
+    0 0 1px rgba(0, 0, 0, 0.08) !important;
+}
+
+.book-details-delete-btn:hover {
+  background: #fff5f5 !important;
+}
+
+/* ── Global Edit button ── */
+.book-details-edit-all-btn {
+  border-radius: 14px !important;
+  height: 44px !important;
+  padding: 0 24px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  background: #007aff !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow:
+    0 2px 20px rgba(0, 122, 255, 0.2),
+    0 0 1px rgba(0, 0, 0, 0.08) !important;
+}
+
+.book-details-edit-all-btn:hover {
+  background: #0062d1 !important;
+  transform: translateY(-1px);
+}
+
+/* ── Preview image in edit mode ── */
+.bento-cover-preview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+/* ── URL display ── */
+.bento-url-text {
+  font-size: 14px;
+  color: #8e8e93;
+  word-break: break-all;
+}
+
+.bento-url-empty {
+  font-style: italic;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .book-details-page {
+    padding: 16px 12px;
+  }
+
+  .bento-card {
+    border-radius: 16px;
+  }
+
+  .bento-card-content {
+    padding: 20px 16px 16px;
+  }
+
+  .bento-card-metric {
+    font-size: 36px;
+  }
+
+  .bento-card-value {
+    font-size: 18px;
+  }
+
+  .bento-cover-fallback {
+    min-height: 240px;
+  }
+
+  .bento-edit-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 16px;
+  }
+
+  .bento-edit-actions {
+    flex-wrap: wrap;
+  }
+
+  .book-details-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .book-details-edit-all-btn,
+  .book-details-delete-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .book-details-back {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-details-page {
+    padding: 12px 8px;
+  }
+
+  .bento-card-content {
+    padding: 16px 12px 12px;
+  }
+}

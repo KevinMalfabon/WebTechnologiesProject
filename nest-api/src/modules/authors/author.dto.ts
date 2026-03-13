@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsOptional } from 'class-validator';
+import { IsString, IsOptional } from 'class-validator';
 
 export class CreateAuthorDto {
   @IsString()
@@ -10,7 +10,5 @@ export class CreateAuthorDto {
   @IsString()
   @IsOptional()
   info: string;
-
-  //@IsInt()
-  //bookCount: number;
+  photoUrl?: string;
 }

@@ -23,14 +23,26 @@ export class BookRepository {
   public async getAllBooks(
     input?: FilterBooksModel,
   ): Promise<[BookModel[], number]> {
-    const [books, totalCount] = await this.bookRepository.findAndCount({
-      take: input?.limit,
-      skip: input?.offset,
-      relations: { author: true },
-      order: input?.sort,
-    });
+    const qb = this.bookRepository.createQueryBuilder('book');
+    qb.leftJoinAndSelect('book.author', 'author');
 
-    return [books, totalCount];
+    if (input?.limit) {
+      qb.take(input.limit);
+    }
+    if (input?.offset) {
+      qb.skip(input.offset);
+    }
+    if (input?.sort) {
+      for (const [key, value] of Object.entries(input.sort)) {
+        qb.addOrderBy(`book.${key}`, value as 'ASC' | 'DESC');
+      }
+    }
+
+    qb.loadRelationCountAndMap('book.salesCount', 'book.sales');
+
+    const [books, totalCount] = await qb.getManyAndCount();
+
+    return [books as BookModel[], totalCount];
   }
 
   public async getBookById(id: string): Promise<BookModel | undefined> {

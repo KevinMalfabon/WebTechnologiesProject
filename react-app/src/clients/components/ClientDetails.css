@@ -1,0 +1,219 @@
+.client-details-page {
+  background: #f5f5f7;
+  min-height: 100vh;
+  padding: 40px 24px;
+}
+
+.client-details-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Back link ── */
+.client-details-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #8e8e93;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.client-details-back:hover {
+  color: #007aff;
+}
+
+/* ── Bento Grid ── */
+.client-details-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+}
+
+/* ── Card base ── */
+.bento-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 0;
+  box-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.04),
+    0 0 1px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+  position: relative;
+}
+
+.bento-card:hover {
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.08),
+    0 0 1px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* ── Card content area ── */
+.bento-card-content {
+  padding: 28px 28px 24px;
+}
+
+/* ── Card label (small caps header) ── */
+.bento-card-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #8e8e93;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Card value (primary text) ── */
+.bento-card-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: -0.4px;
+  line-height: 1.3;
+}
+
+/* ── Edit pencil button ── */
+.bento-edit-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #f5f5f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  color: #8e8e93;
+  font-size: 14px;
+  z-index: 2;
+}
+
+.bento-card:hover .bento-edit-btn {
+  background: #007aff;
+  color: #fff;
+}
+
+/* ── Save / Cancel row ── */
+.bento-edit-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* ── Cover image ── */
+.bento-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bento-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  background: linear-gradient(145deg, #e8e0f0 0%, #d4e4f7 50%, #e0ecf8 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #8e8e93;
+}
+
+/* ── Action bar ── */
+.client-details-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  grid-column: span 12;
+}
+
+.client-details-delete-btn {
+  border-radius: 14px !important;
+  height: 44px !important;
+  padding: 0 20px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  border: none !important;
+  background: #fff !important;
+  color: #ff3b30 !important;
+  box-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.04),
+    0 0 1px rgba(0, 0, 0, 0.08) !important;
+}
+
+.client-details-delete-btn:hover {
+  background: #fff5f5 !important;
+}
+
+/* ── Global Edit button ── */
+.client-details-edit-all-btn {
+  border-radius: 14px !important;
+  height: 44px !important;
+  padding: 0 24px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  background: #007aff !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow:
+    0 2px 20px rgba(0, 122, 255, 0.2),
+    0 0 1px rgba(0, 0, 0, 0.08) !important;
+}
+
+.client-details-edit-all-btn:hover {
+  background: #0062d1 !important;
+  transform: translateY(-1px);
+}
+
+/* ── Grid span helpers ── */
+.span-4 {
+  grid-column: span 4;
+}
+.span-6 {
+  grid-column: span 6;
+}
+.span-8 {
+  grid-column: span 8;
+}
+.span-12 {
+  grid-column: span 12;
+}
+
+.row-1-3 {
+  grid-row: 1 / 3;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .client-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .span-4,
+  .span-6,
+  .span-8 {
+    grid-column: span 1;
+  }
+
+  .row-1-3 {
+    grid-row: auto;
+  }
+}
