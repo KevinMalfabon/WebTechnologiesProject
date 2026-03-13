@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { type JSX } from 'react'
 import { Breadcrumb } from 'antd'
 import {
   HomeOutlined,
@@ -9,9 +9,14 @@ import {
   ShoppingCartOutlined,
 } from '@ant-design/icons'
 import { Link, useMatches, type RouteMatch } from '@tanstack/react-router'
-import axios from 'axios'
 
 type AnyParams = Record<string, string | undefined>
+
+type RouteParams = {
+  bookId?: string
+  clientId?: string
+  saleId?: string
+}
 
 type AnyRouteMatch = RouteMatch<
   string, // route id
@@ -23,115 +28,174 @@ type AnyRouteMatch = RouteMatch<
   unknown // loader deps
 >
 
-type BreadcrumbItem = {
-  key: string
-  title: React.ReactNode
-}
-
 export function AppBreadcrumb(): JSX.Element {
   const matches = useMatches() as AnyRouteMatch[]
-  const [bookName, setBookName] = useState<string | null>(null)
 
-  const last = matches[matches.length - 1]
-  const dyn = last?.params && Object.values(last.params)[0]
-  const isBooks = last?.pathname.startsWith('/books') ?? false
-  const hasBookId = isBooks && dyn
+  // only show the current route in the menu of the breadcrumb
+  // matches is ordered from the last entry
+  // build a breadcrumb list from all route matches so the user can
+  // see the full path (e.g. “Books > 1234-uuid”) instead of only the
+  // current segment.  Home is shown only on the root page.
+  const [labelCache, setLabelCache] = React.useState<Record<string, string>>( {})
+  const breadcrumbItems: Array<{ key: string; title: React.ReactNode }> = []
 
-  useEffect(() => {
-    if (hasBookId) {
-      axios
-        .get(`http://localhost:3000/books/${dyn}`)
-        .then(res => setBookName(res.data.title ?? null))
-        .catch(() => setBookName(null))
-    } else {
-      setBookName(null)
+  // fetch display names for any param-based routes we encounter.  store
+  // by a composite key (type-id) so books/123 and clients/123 don't clash.
+  React.useEffect(() => {
+    matches.forEach(m => {
+      if (m.params) {
+        const { bookId, clientId, saleId } = m.params as RouteParams
+
+        if (bookId) {
+          const key = `book-${bookId}`
+          if (!labelCache[key]) {
+            fetch(`http://localhost:3000/books/${bookId}`)
+              .then(r => r.json())
+              .then(d => {
+                if (d && d.title) {
+                  setLabelCache(prev => ({ ...prev, [key]: d.title }))
+                }
+              })
+              .catch(() => {})
+          }
+        }
+
+        if (clientId) {
+          const key = `client-${clientId}`
+          if (!labelCache[key]) {
+            fetch(`http://localhost:3000/clients/${clientId}`)
+              .then(r => r.json())
+              .then(d => {
+                if (d && (d.firstName || d.lastName)) {
+                  setLabelCache(prev => ({
+                    ...prev,
+                    [key]: `${d.firstName ?? ''} ${d.lastName ?? ''}`.trim(),
+                  }))
+                }
+              })
+              .catch(() => {})
+          }
+        }
+
+        if (saleId) {
+          const key = `sale-${saleId}`
+          if (!labelCache[key]) {
+            fetch(`http://localhost:3000/sales/${saleId}`)
+              .then(r => r.json())
+              .then(d => {
+                if (d) {
+                  const label =
+                    d.client && d.client.firstName
+                      ? `${d.client.firstName} ${d.client.lastName}`
+                      : saleId
+                  setLabelCache(prev => ({ ...prev, [key]: label }))
+                }
+              })
+              .catch(() => {})
+          }
+        }
+      }
+    })
+  }, [matches, labelCache])
+
+  // always include home at the start so users can jump back
+  breadcrumbItems.push({
+    key: 'home',
+    title: (
+      <Link to="/">
+        <HomeOutlined /> Home
+      </Link>
+    ),
+  })
+
+  // Get the current match (last one)
+  const currentMatch = matches[matches.length - 1]
+  if (!currentMatch || currentMatch.pathname === '/') {
+    // Only home, already added
+  } else {
+    const isBooks = currentMatch.pathname.startsWith('/books')
+    const isClients = currentMatch.pathname.startsWith('/clients')
+    const isAuthors = currentMatch.pathname.startsWith('/authors')
+    const isSales = currentMatch.pathname.startsWith('/sales')
+    const isAbout = currentMatch.pathname === '/about'
+
+    // Add the section breadcrumb
+    let sectionTitle: React.ReactNode = null
+    let listPath = currentMatch.pathname
+    if (isBooks) {
+      sectionTitle = (
+        <span>
+          <BookOutlined /> Books
+        </span>
+      )
+      if (currentMatch.params && (currentMatch.params as RouteParams).bookId) {
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
+      }
+    } else if (isClients) {
+      sectionTitle = (
+        <span>
+          <TeamOutlined /> Clients
+        </span>
+      )
+      if (
+        currentMatch.params &&
+        (currentMatch.params as RouteParams).clientId
+      ) {
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
+      }
+    } else if (isAuthors) {
+      sectionTitle = (
+        <span>
+          <UserOutlined /> Authors
+      </span>
+      )
+    } else if (isSales) {
+      sectionTitle = (
+        <span>
+          <ShoppingCartOutlined /> Sales
+        </span>
+      )
+      if (currentMatch.params && (currentMatch.params as RouteParams).saleId) {
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
+      }
+    } else if (isAbout) {
+      sectionTitle = (
+        <span>
+          <InfoOutlined /> About
+        </span>
+      )
     }
-  }, [hasBookId, dyn])
 
-  const breadcrumbItems: BreadcrumbItem[] = []
-
-  if (last) {
-    const isHome = last.pathname === '/'
-    const isClients = last.pathname.startsWith('/clients')
-    const isAuthors = last.pathname.startsWith('/authors')
-    const isSales = last.pathname.startsWith('/sales')
-    const isAbout = last.pathname === '/about'
-
-    const domainIcon = isHome ? (
-      <HomeOutlined />
-    ) : isBooks ? (
-      <BookOutlined />
-    ) : isClients ? (
-      <TeamOutlined />
-    ) : isAuthors ? (
-      <UserOutlined />
-    ) : isSales ? (
-      <ShoppingCartOutlined />
-    ) : isAbout ? (
-      <InfoOutlined />
-    ) : null
-
-    const domainLabel = isHome
-      ? 'Home'
-      : isBooks
-        ? 'Books'
-        : isClients
-          ? 'Clients'
-          : isAuthors
-            ? 'Authors'
-            : isSales
-              ? 'Sales'
-              : isAbout
-                ? 'About'
-                : ''
-
-    const domainLink = isBooks
-      ? '/books'
-      : isClients
-        ? '/clients'
-        : isSales
-          ? '/sales'
-          : undefined
-
-    if (dyn && domainLink) {
-      // Detail page: show parent domain as link, then detail name
+    if (sectionTitle) {
       breadcrumbItems.push({
-        key: 'domain',
-        title: (
-          <Link to={domainLink}>
-            {domainIcon} {domainLabel}
-          </Link>
-        ),
+        key: 'section',
+        title: <Link to={listPath}>{sectionTitle}</Link>,
       })
+    }
 
-      const detailLabel = isBooks && bookName ? bookName : dyn
+    // Add dynamic name if it's a detail page
+    if (currentMatch.params) {
+      const params = currentMatch.params as RouteParams
+      let dyn: string | undefined
+      let key: string
 
-      breadcrumbItems.push({
-        key: 'detail',
-        title: (
-          <span
-            style={{
-              maxWidth: 200,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: 'inline-block',
-              verticalAlign: 'bottom',
-            }}
-          >
-            {detailLabel}
-          </span>
-        ),
-      })
-    } else {
-      // List or static page: single breadcrumb item
-      breadcrumbItems.push({
-        key: last.id,
-        title: (
-          <span>
-            {domainIcon} {domainLabel}
-          </span>
-        ),
-      })
+      if (params.bookId) {
+        key = `book-${params.bookId}`
+        dyn = labelCache[key] || params.bookId
+      } else if (params.clientId) {
+        key = `client-${params.clientId}`
+        dyn = labelCache[key] || params.clientId
+      } else if (params.saleId) {
+        key = `sale-${params.saleId}`
+        dyn = labelCache[key] || params.saleId
+      }
+
+      if (dyn) {
+        breadcrumbItems.push({
+          key: 'detail',
+          title: <span>{dyn}</span>,
+        })
+      }
     }
   }
 
@@ -146,6 +210,25 @@ export function AppBreadcrumb(): JSX.Element {
       }}
     >
       <Breadcrumb separator=">" items={breadcrumbItems} />
+    </div>
+  )
+
+  return (
+    <div
+      style={{
+        padding: '16px 24px 0',
+        backgroundColor: 'rgba(255,255,255,0.08)',
+        // ensure text and separators show up against the dark page
+        color: '#ffffff',
+      }}
+    >
+      <Breadcrumb
+        separator=">"
+        items={breadcrumbItems}
+        style={{
+          color: '#f0f0f0',
+        }}
+      />
     </div>
   )
 }

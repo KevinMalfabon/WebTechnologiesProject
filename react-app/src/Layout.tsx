@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import { Route as indexRoute } from './routes/index'
 import { Route as aboutRoute } from './routes/about'
 import { Route as booksRoute } from './routes/books'
@@ -20,6 +20,23 @@ const { Header, Content } = AntLayout
 const { Title } = Typography
 
 export function Layout({ children }: LayoutProps) {
+  const location = useLocation()
+
+  let selectedKey: string
+  if (location.pathname === '/') {
+    selectedKey = 'home'
+  } else if (location.pathname.startsWith('/books')) {
+    selectedKey = 'books'
+  } else if (location.pathname.startsWith('/clients')) {
+    selectedKey = 'clients'
+  } else if (location.pathname.startsWith('/sales')) {
+    selectedKey = 'sales'
+  } else if (location.pathname === '/about') {
+    selectedKey = 'about'
+  } else {
+    selectedKey = 'home' // fallback
+  }
+
   const items: Required<MenuProps>['items'] = [
     {
       label: <Link to={indexRoute.to}>Home</Link>,
@@ -27,7 +44,7 @@ export function Layout({ children }: LayoutProps) {
       icon: <HomeOutlined />,
     },
     {
-      label: <Link to={booksRoute.to}>Books</Link>,
+      label: <  Link to={booksRoute.to}>Books</Link>,
       key: 'books',
       icon: <BookOutlined />,
     },
@@ -64,6 +81,7 @@ export function Layout({ children }: LayoutProps) {
         </Title>
         <Menu
           mode="horizontal"
+          selectedKeys={[selectedKey]}
           items={items}
           style={{ flex: 1, minWidth: 0, borderBottom: 'none' }}
         />
