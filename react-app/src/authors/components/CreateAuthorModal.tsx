@@ -28,8 +28,8 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
     }
 
     onCreate({
-      firstname: firstName.trim(),
-      lastname: lastName.trim(),
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
       info: info.trim(),
     })
 

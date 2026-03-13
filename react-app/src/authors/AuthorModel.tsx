@@ -1,13 +1,13 @@
 export type AuthorModel = {
   id: string
-  firstname: string
-  lastname: string
-  info: string
+  firstName: string
+  lastName: string
+  info?: string
 }
 
 export type CreateAuthorModel = {
-  firstname: string
-  lastname: string
+  firstName: string
+  lastName: string
   info: string
 }
 

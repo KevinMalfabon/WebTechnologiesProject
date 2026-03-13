@@ -4,7 +4,7 @@ import {
   CreateAuthorModel,
   UpdateAuthorModel,
 } from './author.model';
-import { AuthorEntity } from './author.entity';
+import { AuthorEntity, AuthorId } from './author.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BookEntity } from '../books/entities/book.entity';
@@ -52,7 +52,7 @@ export class AuthorRepository {
     author: UpdateAuthorModel,
   ): Promise<AuthorModel | undefined> {
     const oldAuthor = await this.authorRepository.findOne({
-      where: { id },
+      where: { id: id as AuthorId },
     });
 
     if (!oldAuthor) {

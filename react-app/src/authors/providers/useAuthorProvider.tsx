@@ -8,8 +8,8 @@ export const useAuthorProvider = () => {
   const loadAuthors = () => {
     axios
       .get('http://localhost:3000/authors')
-      .then(data => {
-        setAuthors(data.data.data)
+      .then(response => {
+        setAuthors(response.data)
       })
       .catch(err => console.error(err))
   }

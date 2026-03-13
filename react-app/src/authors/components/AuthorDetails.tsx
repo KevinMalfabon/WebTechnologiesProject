@@ -26,8 +26,9 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
         <ArrowLeftOutlined />
       </Link>
       <Typography.Title level={1}>{author?.id}</Typography.Title>
-      <Typography.Title level={3}>{author?.firstname}</Typography.Title>
-      <Typography.Title level={3}>{author?.lastname}</Typography.Title>
+      <Typography.Title level={3}>{author?.firstName}</Typography.Title>
+      <Typography.Title level={3}>{author?.lastName}</Typography.Title>
+      <Typography.Paragraph>{author?.info}</Typography.Paragraph>
     </Space>
   )
 }
