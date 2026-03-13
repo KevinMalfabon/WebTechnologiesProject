@@ -1,4 +1,13 @@
-import { Skeleton, Space, Typography, Card, Avatar, Descriptions, Button, List } from 'antd'
+import {
+  Skeleton,
+  Space,
+  Typography,
+  Card,
+  Avatar,
+  Descriptions,
+  Button,
+  List,
+} from 'antd'
 import { useAuthorDetailsProvider } from '../providers/useAuthorDetailsProvider'
 import { useEffect } from 'react'
 import { ArrowLeftOutlined, UserOutlined } from '@ant-design/icons'
@@ -81,7 +90,7 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
           <List
             header={<div>Books by this Author</div>}
             dataSource={author.books}
-            renderItem={(book) => (
+            renderItem={book => (
               <List.Item>
                 <List.Item.Meta
                   title={

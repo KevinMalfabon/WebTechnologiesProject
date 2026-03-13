@@ -60,8 +60,7 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
         onOk={handleCreate}
         title="Create Author"
         okButtonProps={{
-          disabled:
-          !firstName.trim() || !lastName.trim() || !info.trim(),
+          disabled: !firstName.trim() || !lastName.trim() || !info.trim(),
         }}
       >
         <Space direction="vertical" style={{ width: '100%' }}>

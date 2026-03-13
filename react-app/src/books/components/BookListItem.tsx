@@ -9,7 +9,7 @@ const { useBreakpoint } = Grid
 
 interface BookListItemProps {
   book: BookModel
-  onDelete: (id: string) => void
+  onDelete?: (id: string) => void
 }
 
 export function BookListItem({ book, onDelete }: BookListItemProps) {
@@ -20,6 +20,25 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
   const coverImage =
     book.coverUrl ||
     'https://via.placeholder.com/300x400?text=No+Cover+Available'
+
+  const actions = []
+
+  if (onDelete) {
+    actions.push(
+      <Button
+        key="delete"
+        type="text"
+        danger
+        icon={<DeleteOutlined />}
+        onClick={e => {
+          e.stopPropagation()
+          setIsDeleteModalOpen(true)
+        }}
+      >
+        Delete
+      </Button>,
+    )
+  }
 
   return (
     <>
@@ -34,21 +53,7 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
         }
         style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
         styles={{ body: { flexGrow: 1 } }}
-        actions={[
-          <Button
-            key="delete"
-            type="text"
-            danger
-            size={isMobile ? 'large' : 'middle'}
-            icon={<DeleteOutlined />}
-            onClick={e => {
-              e.stopPropagation()
-              setIsDeleteModalOpen(true)
-            }}
-          >
-            Delete
-          </Button>,
-        ]}
+        actions={actions}
       >
         <Card.Meta
           title={
@@ -83,7 +88,7 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
         open={isDeleteModalOpen}
         centered
         onOk={() => {
-          onDelete(book.id)
+          onDelete?.(book.id)
           setIsDeleteModalOpen(false)
         }}
         onCancel={() => setIsDeleteModalOpen(false)}

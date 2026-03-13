@@ -1,5 +1,9 @@
 import { useState } from 'react'
-import type { AuthorModel, CreateAuthorModel, UpdateAuthorModel } from '../AuthorModel'
+import type {
+  AuthorModel,
+  CreateAuthorModel,
+  UpdateAuthorModel,
+} from '../AuthorModel'
 import axios from 'axios'
 
 export const useAuthorProvider = () => {

@@ -12,7 +12,7 @@ function About() {
     'Maksym Bidolakh',
     'Dmytro Chekhovskyi',
     'Supajira Maturossuntorn',
-    'Phummiphat Karthong'
+    'Phummiphat Karthong',
   ]
 
   return (
@@ -41,14 +41,20 @@ function About() {
 
         <List
           dataSource={creators}
-          renderItem={(creator) => (
-            <List.Item style={{ justifyContent: 'center', border: 'none', padding: '0.5rem 0' }}>
+          renderItem={creator => (
+            <List.Item
+              style={{
+                justifyContent: 'center',
+                border: 'none',
+                padding: '0.5rem 0',
+              }}
+            >
               <Typography.Text
                 style={{
                   fontSize: '18px',
                   fontWeight: '500',
                   color: 'var(--ant-color-text)',
-                  textAlign: 'center'
+                  textAlign: 'center',
                 }}
               >
                 {creator}
