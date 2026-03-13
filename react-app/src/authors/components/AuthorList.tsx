@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useAuthorProvider } from '../providers/useAuthorProvider'
 import { AuthorListItem } from './AuthorListItem'
 import { CreateAuthorModal } from './CreateAuthorModal'
+import { Row, Col } from 'antd'
 
 export function AuthorList() {
   const { authors, loadAuthors, deleteAuthor, updateAuthor, createAuthor } =
@@ -14,16 +15,17 @@ export function AuthorList() {
   return (
     <>
       <CreateAuthorModal onCreate={createAuthor} />
-      <div style={{ padding: '0 .5rem' }}>
+      <Row gutter={[16, 16]} style={{ padding: '0 .5rem' }}>
         {authors.map(author => (
-          <AuthorListItem
-            key={author.id}
-            author={author}
-            onDelete={deleteAuthor}
-            onUpdate={updateAuthor}
-          />
+          <Col span={6} key={author.id}>
+            <AuthorListItem
+              author={author}
+              onDelete={deleteAuthor}
+              onUpdate={updateAuthor}
+            />
+          </Col>
         ))}
-      </div>
+      </Row>
     </>
   )
 }

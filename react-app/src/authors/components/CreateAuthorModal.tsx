@@ -41,6 +41,14 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
       <Button
         icon={<PlusOutlined />}
         type="primary"
+        size="large"
+        shape="round"
+        style={{
+          background: 'linear-gradient(135deg, #1890ff 0%, #40a9ff 100%)',
+          border: 'none',
+          boxShadow: '0 4px 12px rgba(24, 144, 255, 0.3)',
+          fontWeight: 'bold',
+        }}
         onClick={() => setIsOpen(true)}
       >
         Create Author

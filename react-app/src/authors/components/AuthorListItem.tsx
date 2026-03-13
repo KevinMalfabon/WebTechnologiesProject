@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { AuthorModel, UpdateAuthorModel } from '../AuthorModel'
-import { Button, Col, Input, Row } from 'antd'
+import { Button, Card, Input } from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
@@ -42,92 +42,75 @@ export function AuthorListItem({
   }
 
   return (
-    <Row
+    <Card
       style={{
-        width: '100%',
-        borderRadius: '10px',
-        backgroundColor: '#EEEEEE',
-        margin: '1rem 0',
-        padding: '.75rem',
+        height: '200px',
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'space-between',
-        alignItems: 'center',
       }}
-    >
-      <Col span={16}>
-        {isEditing ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
-            <Input
-              placeholder="First Name"
-              value={firstName}
-              onChange={e => setFirstName(e.target.value)}
-            />
-            <Input
-              placeholder="Last Name"
-              value={lastName}
-              onChange={e => setLastName(e.target.value)}
-            />
-            <Input
-              placeholder="Info"
-              value={info}
-              onChange={e => setInfo(e.target.value)}
-            />
-          </div>
-        ) : (
-          <Link
-            to="/authors/$authorId"
-            params={{ authorId: author.id }}
-            style={{
-              textAlign: 'left',
-              color: 'inherit',
-            }}
+      actions={[
+        isEditing ? (
+          <Button
+            type="primary"
+            onClick={onValidateEdit}
+            disabled={!firstName.trim() || !lastName.trim() || !info.trim()}
           >
-            <div>
-              <span style={{ fontWeight: 'bold' }}>
-                {author.firstName} {author.lastName}
-              </span>
-            </div>
-            <div>{author.info}</div>
-            {author.bookCount !== undefined && (
-              <div>Books written: {author.bookCount}</div>
-            )}
-          </Link>
-        )}
-      </Col>
-
-      <Col
-        span={8}
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: '.25rem',
-        }}
-      >
-        {isEditing ? (
-          <>
-            <Button
-              type="primary"
-              onClick={onValidateEdit}
-              disabled={
-                !firstName.trim() || !lastName.trim() || !info.trim()
-              }
-            >
-              <CheckOutlined />
-            </Button>
-            <Button onClick={onCancelEdit}>
-              <CloseOutlined />
-            </Button>
-          </>
+            <CheckOutlined />
+          </Button>
         ) : (
           <Button type="primary" onClick={() => setIsEditing(true)}>
             <EditOutlined />
           </Button>
-        )}
-
-        <Button type="primary" danger onClick={() => onDelete(author.id)}>
-          <DeleteOutlined />
-        </Button>
-      </Col>
-    </Row>
+        ),
+        isEditing ? (
+          <Button onClick={onCancelEdit}>
+            <CloseOutlined />
+          </Button>
+        ) : (
+          <Button type="primary" danger onClick={() => onDelete(author.id)}>
+            <DeleteOutlined />
+          </Button>
+        ),
+      ]}
+    >
+      {isEditing ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
+          <Input
+            placeholder="First Name"
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+          />
+          <Input
+            placeholder="Last Name"
+            value={lastName}
+            onChange={e => setLastName(e.target.value)}
+          />
+          <Input
+            placeholder="Info"
+            value={info}
+            onChange={e => setInfo(e.target.value)}
+          />
+        </div>
+      ) : (
+        <Link
+          to="/authors/$authorId"
+          params={{ authorId: author.id }}
+          style={{ color: 'inherit', textDecoration: 'none' }}
+        >
+          <Card.Meta
+            title={`${author.firstName} ${author.lastName}`}
+            description={
+              <>
+                <div>{author.info}</div>
+                {author.bookCount !== undefined && (
+                  <div>Books written: {author.bookCount}</div>
+                )}
+              </>
+            }
+          />
+        </Link>
+      )}
+    </Card>
   )
 }
