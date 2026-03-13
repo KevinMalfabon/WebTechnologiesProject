@@ -1,18 +1,21 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, } from 'typeorm';
 
-export type AuthorId = string & { __brand: 'Author' };
+export type AuthorId = string;
 
 @Entity('authors')
 export class AuthorEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: AuthorId;
+  id: string;
 
-  @Column({ name: 'first_name', type: 'varchar' })
+  @Column({ name: 'first_name', type: 'varchar' , length: 255})
   firstName: string;
 
-  @Column({ name: 'last_name', type: 'varchar' })
+  @Column({ name: 'last_name', type: 'varchar' , length: 255})
   lastName: string;
 
+  @Column({ name: 'information', type: 'varchar', length: 1000, nullable: true, default: '' })
+  info?: string;
+  
   @Column({ name: 'photo_url', type: 'varchar', nullable: true })
   photoUrl?: string;
 }
