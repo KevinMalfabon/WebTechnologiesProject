@@ -3,6 +3,7 @@ import { Route as indexRoute } from './routes/index'
 import { Route as aboutRoute } from './routes/about'
 import { Route as booksRoute } from './routes/books'
 import { Route as clientsRoute } from './routes/clients'
+import { Route as authorsRoute } from './routes/authors'
 import { ShoppingCartOutlined } from '@ant-design/icons'
 import { Route as salesRoute } from './routes/sales'
 import { Layout as AntLayout, Menu, Typography, type MenuProps } from 'antd'
@@ -31,6 +32,8 @@ export function Layout({ children }: LayoutProps) {
     selectedKey = 'clients'
   } else if (location.pathname.startsWith('/sales')) {
     selectedKey = 'sales'
+  } else if (location.pathname.startsWith('/authors')) {
+    selectedKey = 'authors'
   } else if (location.pathname === '/about') {
     selectedKey = 'about'
   } else {
@@ -47,6 +50,11 @@ export function Layout({ children }: LayoutProps) {
       label: <Link to={booksRoute.to}>Books</Link>,
       key: 'books',
       icon: <BookOutlined />,
+    },
+    {
+      label: <Link to={authorsRoute.to}>Authors</Link>,
+      key: 'authors',
+      icon: <TeamOutlined />,
     },
     {
       label: <Link to={clientsRoute.to}>Clients</Link>,

@@ -500,7 +500,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
 
       {/* ── Purchased Books Modal ── */}
       <Modal
-        title={<b>{client.firstName}'s Purchase History</b>}
+        title={<b>{client.firstName}&apos;s Purchase History</b>}
         open={isPurchasedModalOpen}
         onCancel={() => setIsPurchasedModalOpen(false)}
         footer={null}
