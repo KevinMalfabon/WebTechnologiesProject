@@ -156,7 +156,7 @@ export function AppBreadcrumb(): JSX.Element {
         </span>
       )
       if (currentMatch.params && (currentMatch.params as RouteParams).saleId) {
-        listPath = currentMatch.pathname.replace(/\/[^\/]+$/, '')
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
       }
     } else if (isAbout) {
       sectionTitle = (
