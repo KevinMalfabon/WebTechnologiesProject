@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react'
 import type { SaleModel, UpdateSaleModel } from '../SaleModel'
-import { Button, Col, DatePicker, Modal, Row, Select, Typography } from 'antd'
+import {
+  Button,
+  Col,
+  DatePicker,
+  Modal,
+  Row,
+  Select,
+  Typography,
+  Space,
+} from 'antd'
 import {
   CheckOutlined,
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
-  CalendarOutlined,
-  UserOutlined,
-  BookOutlined,
 } from '@ant-design/icons'
 import axios from 'axios'
 import dayjs from 'dayjs'
@@ -97,308 +103,116 @@ export function SaleListItem({ sale, onDelete, onUpdate }: SaleListItemProps) {
   return (
     <>
       <Row
-        gutter={16}
+        gutter={24}
         style={{
           width: '100%',
-          minHeight: '92px',
-          borderRadius: '16px',
-          background:
-            'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(247,248,252,0.98) 100%)',
-          margin: '0 0 1rem 0',
-          padding: '1rem 1rem',
+          background: '#ffffff',
+          margin: '0 0 12px 0',
+          padding: '12px 20px',
           display: 'flex',
           alignItems: 'center',
-          border: '1px solid #e8ebf2',
-          boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
-          transition: 'all 0.2s ease',
+          border: '1px solid #f0f0f0',
+          borderRadius: '8px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+          transition: 'transform 0.2s',
         }}
+        className="sale-item-row"
       >
         <Col span={7}>
           {isEditing ? (
-            <div>
-              <Text
-                style={{
-                  display: 'block',
-                  fontSize: '0.8rem',
-                  color: '#7a869a',
-                  marginBottom: '.4rem',
-                }}
-              >
-                Client
-              </Text>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               <Select
-                placeholder="Select a client"
                 value={clientId || undefined}
                 onChange={value => setClientId(value)}
                 loading={isLoadingClients}
                 style={{ width: '100%' }}
-                options={clients.map(client => ({
-                  value: client.id,
-                  label: `${client.firstName} ${client.lastName}`,
+                options={clients.map(c => ({
+                  value: c.id,
+                  label: `${c.firstName} ${c.lastName}`,
                 }))}
                 showSearch
-                optionFilterProp="label"
-                size="large"
               />
             </div>
           ) : (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '.75rem',
-              }}
-            >
-              <div
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '12px',
-                  backgroundColor: '#eaf2ff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#2563eb',
-                  flexShrink: 0,
-                }}
-              >
-                <UserOutlined />
-              </div>
-
+            <Space size="middle" align="start">
               <div>
-                <Text
-                  style={{
-                    display: 'block',
-                    fontSize: '0.8rem',
-                    color: '#7a869a',
-                    marginBottom: '.15rem',
-                  }}
-                >
-                  Client
-                </Text>
-                <div
-                  style={{
-                    fontWeight: 700,
-                    fontSize: '1rem',
-                    color: '#1f2937',
-                    lineHeight: 1.2,
-                  }}
-                >
+                <Text strong style={{ fontSize: '14px' }}>
                   {sale.client
                     ? `${sale.client.firstName} ${sale.client.lastName}`
-                    : 'Unknown client'}
-                </div>
+                    : 'Unknown'}
+                </Text>
               </div>
-            </div>
+            </Space>
           )}
         </Col>
 
         <Col span={7}>
           {isEditing ? (
-            <div>
-              <Text
-                style={{
-                  display: 'block',
-                  fontSize: '0.8rem',
-                  color: '#7a869a',
-                  marginBottom: '.4rem',
-                }}
-              >
-                Book
-              </Text>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               <Select
-                placeholder="Select a book"
                 value={bookId || undefined}
                 onChange={value => setBookId(value)}
                 loading={isLoadingBooks}
                 style={{ width: '100%' }}
-                options={books.map(book => ({
-                  value: book.id,
-                  label: book.title,
-                }))}
+                options={books.map(b => ({ value: b.id, label: b.title }))}
                 showSearch
-                optionFilterProp="label"
-                size="large"
               />
             </div>
           ) : (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '.75rem',
-              }}
-            >
-              <div
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '12px',
-                  backgroundColor: '#f3e8ff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#9333ea',
-                  flexShrink: 0,
-                }}
-              >
-                <BookOutlined />
-              </div>
-
+            <Space size="middle">
               <div>
-                <Text
-                  style={{
-                    display: 'block',
-                    fontSize: '0.8rem',
-                    color: '#7a869a',
-                    marginBottom: '.15rem',
-                  }}
-                >
-                  Book
+                <Text strong style={{ fontSize: '14px' }}>
+                  {sale.book?.title || 'Unknown'}
                 </Text>
-                <div
-                  style={{
-                    fontWeight: 700,
-                    fontSize: '1rem',
-                    color: '#1f2937',
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {sale.book ? sale.book.title : 'Unknown book'}
-                </div>
               </div>
-            </div>
+            </Space>
           )}
         </Col>
 
         <Col span={6}>
-          {isEditing ? (
+          <Space size="middle">
             <div>
-              <Text
-                style={{
-                  display: 'block',
-                  fontSize: '0.8rem',
-                  color: '#7a869a',
-                  marginBottom: '.4rem',
-                }}
-              >
-                Purchase date
-              </Text>
-              <DatePicker
-                style={{ width: '100%' }}
-                value={purchasedAt ? dayjs(purchasedAt) : null}
-                onChange={date => {
-                  setPurchasedAt(date ? dayjs(date).format('YYYY-MM-DD') : '')
-                }}
-                size="large"
-              />
+              {isEditing ? (
+                <DatePicker
+                  value={purchasedAt ? dayjs(purchasedAt) : null}
+                  onChange={date =>
+                    setPurchasedAt(date ? date.format('YYYY-MM-DD') : '')
+                  }
+                  size="small"
+                />
+              ) : (
+                <Text style={{ fontSize: '14px' }}>{sale.purchasedAt}</Text>
+              )}
             </div>
-          ) : (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '.75rem',
-              }}
-            >
-              <div
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '12px',
-                  backgroundColor: '#ecfdf5',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#059669',
-                  flexShrink: 0,
-                }}
-              >
-                <CalendarOutlined />
-              </div>
-
-              <div>
-                <Text
-                  style={{
-                    display: 'block',
-                    fontSize: '0.8rem',
-                    color: '#7a869a',
-                    marginBottom: '.15rem',
-                  }}
-                >
-                  Purchase date
-                </Text>
-                <div
-                  style={{
-                    fontWeight: 600,
-                    fontSize: '.98rem',
-                    color: '#1f2937',
-                  }}
-                >
-                  {sale.purchasedAt}
-                </div>
-              </div>
-            </div>
-          )}
+          </Space>
         </Col>
 
-        <Col span={4}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: '.5rem',
-              alignItems: 'center',
-              height: '100%',
-            }}
-          >
+        <Col span={4} style={{ textAlign: 'right' }}>
+          <Space>
             {isEditing ? (
               <>
                 <Button
                   type="primary"
+                  icon={<CheckOutlined />}
                   onClick={onValidateEdit}
                   disabled={!canSave}
-                  style={{
-                    borderRadius: '10px',
-                    boxShadow: '0 4px 12px rgba(22, 119, 255, 0.25)',
-                  }}
-                >
-                  <CheckOutlined />
-                </Button>
-
-                <Button
-                  onClick={onCancelEdit}
-                  style={{
-                    borderRadius: '10px',
-                  }}
-                >
-                  <CloseOutlined />
-                </Button>
+                />
+                <Button icon={<CloseOutlined />} onClick={onCancelEdit} />
               </>
             ) : (
               <Button
-                type="primary"
+                type="text"
+                icon={<EditOutlined />}
                 onClick={() => setIsEditing(true)}
-                style={{
-                  borderRadius: '10px',
-                  boxShadow: '0 4px 12px rgba(22, 119, 255, 0.25)',
-                }}
-              >
-                <EditOutlined />
-              </Button>
+              />
             )}
-
             <Button
+              type="text"
               danger
+              icon={<DeleteOutlined />}
               onClick={() => setIsDeleteModalOpen(true)}
-              style={{
-                borderRadius: '10px',
-                boxShadow: '0 4px 12px rgba(220, 38, 38, 0.18)',
-              }}
-            >
-              <DeleteOutlined />
-            </Button>
-          </div>
+            />
+          </Space>
         </Col>
       </Row>
 
