@@ -48,36 +48,6 @@ export function SaleList() {
         </Row>
       </Card>
 
-      <Row
-        gutter={24}
-        style={{
-          padding: '0 20px 8px 20px',
-          marginBottom: '4px',
-          borderBottom: '1px solid #f0f0f0',
-        }}
-      >
-        <Col span={7}>
-          <Text strong type="secondary">
-            Client
-          </Text>
-        </Col>
-        <Col span={7}>
-          <Text strong type="secondary">
-            Book
-          </Text>
-        </Col>
-        <Col span={6}>
-          <Text strong type="secondary">
-            Purchase Date
-          </Text>
-        </Col>
-        <Col span={4} style={{ textAlign: 'right' }}>
-          <Text strong type="secondary">
-            Actions
-          </Text>
-        </Col>
-      </Row>
-
       <div>
         {sales.map(sale => (
           <SaleListItem

@@ -6,14 +6,13 @@ const RootLayout = () => {
   return (
     <ConfigProvider
       theme={{
-        algorithm: theme.defaultAlgorithm,
+        algorithm: theme.defaultAlgorithm, // Forces light mode even if user is on dark mode
         token: {
           colorPrimary: '#8c5e3c', // Warm book-leather brown
           colorBgContainer: '#ffffff',
           colorBgLayout: '#fdfaf5', // Soft parchment background
           borderRadius: 6,
-          fontFamily:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+          fontFamily: 'Georgia, "Times New Roman", serif',
         },
         components: {
           Breadcrumb: {
