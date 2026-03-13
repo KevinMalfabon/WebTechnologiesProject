@@ -50,4 +50,8 @@ export class GetSalesDto {
   @IsUUID(4)
   @IsOptional()
   clientId?: string;
+
+  @IsUUID(4)
+  @IsOptional()
+  bookId?: string;
 }

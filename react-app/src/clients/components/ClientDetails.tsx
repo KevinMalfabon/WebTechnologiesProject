@@ -8,7 +8,7 @@ import {
   Popconfirm,
   message,
   Modal,
-  List
+  List,
 } from 'antd'
 import {
   EditOutlined,
@@ -17,7 +17,7 @@ import {
   DeleteOutlined,
   UserOutlined,
   MailOutlined,
-  PictureOutlined
+  PictureOutlined,
 } from '@ant-design/icons'
 import { useNavigate, Link } from '@tanstack/react-router'
 import axios from 'axios'
@@ -136,18 +136,22 @@ interface ClientDetailsProps {
 }
 
 export const ClientDetails = ({ id }: ClientDetailsProps) => {
-  const { isLoading: loading, client, loadClient } = useClientDetailsProvider(id)
+  const {
+    isLoading: loading,
+    client,
+    loadClient,
+  } = useClientDetailsProvider(id)
   const { sales, loadSales } = useClientSalesProvider(id)
   const navigate = useNavigate()
 
   const [isEditMode, setIsEditMode] = useState(false)
   const [editingField, setEditingField] = useState<string | null>(null)
-  
+
   const [editFirstName, setEditFirstName] = useState('')
   const [editLastName, setEditLastName] = useState('')
   const [editEmail, setEditEmail] = useState('')
   const [editPicture, setEditPicture] = useState('')
-  
+
   const [isPurchasedModalOpen, setIsPurchasedModalOpen] = useState(false)
 
   useEffect(() => {
@@ -235,7 +239,11 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
               className="bento-card span-4"
               style={{ minHeight: 400, padding: 24 }}
             >
-              <Skeleton.Avatar active shape="circle" style={{ width: 120, height: 120, margin: '80px auto' }} />
+              <Skeleton.Avatar
+                active
+                shape="circle"
+                style={{ width: 120, height: 120, margin: '80px auto' }}
+              />
             </div>
             <div className="bento-card span-8" style={{ padding: 28 }}>
               <Skeleton active paragraph={{ rows: 4 }} />
@@ -303,7 +311,13 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
                     src={editPicture}
                     alt="Preview"
                     className="bento-cover-preview"
-                    style={{ borderRadius: '50%', width: 120, height: 120, margin: '20px auto', display: 'block'}}
+                    style={{
+                      borderRadius: '50%',
+                      width: 120,
+                      height: 120,
+                      margin: '20px auto',
+                      display: 'block',
+                    }}
                     onError={e => {
                       ;(e.target as HTMLImageElement).style.display = 'none'
                     }}
@@ -357,7 +371,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
             onSave={() => saveField('name')}
             onCancel={cancelEdit}
             editContent={
-               <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ display: 'flex', gap: '10px' }}>
                 <Input
                   value={editFirstName}
                   onChange={e => setEditFirstName(e.target.value)}
@@ -415,28 +429,46 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
               />
             }
             value={
-              <div className="bento-card-value" style={{ fontWeight: 400, color: '#3A3A3C' }}>
-                 {client.email || (
-                   <span style={{ color: '#C7C7CC', fontStyle: 'italic', fontSize: '18px' }}>Not provided</span>
-                 )}
+              <div
+                className="bento-card-value"
+                style={{ fontWeight: 400, color: '#3A3A3C' }}
+              >
+                {client.email || (
+                  <span
+                    style={{
+                      color: '#C7C7CC',
+                      fontStyle: 'italic',
+                      fontSize: '18px',
+                    }}
+                  >
+                    Not provided
+                  </span>
+                )}
               </div>
             }
           />
 
           {/* ── Action Bar ── */}
           <div className="client-details-actions">
-            
             <Button
               size="large"
-              style={{ borderRadius: 14, height: 44, padding: '0 24px', fontWeight: 600, color: '#1d1d1f', border: '1px solid #d9d9d9', boxShadow: '0 2px 0 rgba(0, 0, 0, 0.02)' }}
+              style={{
+                borderRadius: 14,
+                height: 44,
+                padding: '0 24px',
+                fontWeight: 600,
+                color: '#1d1d1f',
+                border: '1px solid #d9d9d9',
+                boxShadow: '0 2px 0 rgba(0, 0, 0, 0.02)',
+              }}
               onClick={() => {
                 loadSales()
                 setIsPurchasedModalOpen(true)
               }}
             >
-               View Purchased Books
+              View Purchased Books
             </Button>
-            
+
             <Button
               type="primary"
               icon={isEditMode ? <CloseOutlined /> : <EditOutlined />}
@@ -465,7 +497,7 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
           </div>
         </div>
       </div>
-      
+
       {/* ── Purchased Books Modal ── */}
       <Modal
         title={<b>{client.firstName}'s Purchase History</b>}
@@ -479,25 +511,31 @@ export const ClientDetails = ({ id }: ClientDetailsProps) => {
           dataSource={sales}
           style={{ marginTop: 16 }}
           renderItem={sale => (
-             <List.Item>
-               <List.Item.Meta
-                 title={
-                   <Link
-                     to={booksRoute.to + '/$bookId'}
-                     params={{ bookId: sale.bookId }}
-                     onClick={() => setIsPurchasedModalOpen(false)}
-                   >
-                     {sale.book?.title}
-                   </Link>
-                 }
-                 description={
-                   <div>
-                     <div>By: {sale.book?.author?.firstName} {sale.book?.author?.lastName}</div>
-                     <div>Purchased on: {new Date(sale.purchasedAt).toLocaleDateString()}</div>
-                   </div>
-                 }
-               />
-             </List.Item>
+            <List.Item>
+              <List.Item.Meta
+                title={
+                  <Link
+                    to={booksRoute.to + '/$bookId'}
+                    params={{ bookId: sale.bookId }}
+                    onClick={() => setIsPurchasedModalOpen(false)}
+                  >
+                    {sale.book?.title}
+                  </Link>
+                }
+                description={
+                  <div>
+                    <div>
+                      By: {sale.book?.author?.firstName}{' '}
+                      {sale.book?.author?.lastName}
+                    </div>
+                    <div>
+                      Purchased on:{' '}
+                      {new Date(sale.purchasedAt).toLocaleDateString()}
+                    </div>
+                  </div>
+                }
+              />
+            </List.Item>
           )}
         />
       </Modal>
