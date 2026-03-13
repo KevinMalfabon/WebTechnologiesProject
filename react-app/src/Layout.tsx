@@ -25,7 +25,7 @@ export function Layout({ children }: LayoutProps) {
       icon: <HomeOutlined />,
     },
     {
-      label: <Link to={booksRoute.to}>Books</Link>,
+      label: <  Link to={booksRoute.to}>Books</Link>,
       key: 'books',
       icon: <BookOutlined />,
     },
