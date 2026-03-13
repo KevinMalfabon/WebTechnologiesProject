@@ -32,6 +32,8 @@ export function Layout({ children }: LayoutProps) {
     selectedKey = 'clients'
   } else if (location.pathname.startsWith('/sales')) {
     selectedKey = 'sales'
+  } else if (location.pathname.startsWith('/authors')) {
+    selectedKey = 'authors'
   } else if (location.pathname === '/about') {
     selectedKey = 'about'
   } else {
