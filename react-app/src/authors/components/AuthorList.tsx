@@ -14,7 +14,9 @@ export function AuthorList() {
 
   return (
     <>
-      <CreateAuthorModal onCreate={createAuthor} />
+      <div style={{ marginBottom: '1rem' }}>
+        <CreateAuthorModal onCreate={createAuthor} />
+      </div>
       <Row gutter={[16, 16]} style={{ padding: '0 .5rem' }}>
         {authors.map(author => (
           <Col span={6} key={author.id}>

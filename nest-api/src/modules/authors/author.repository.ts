@@ -8,6 +8,7 @@ import { AuthorEntity, AuthorId } from './author.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BookEntity } from '../books/entities/book.entity';
+import { BookModel } from '../books/book.model';
 
 @Injectable()
 export class AuthorRepository {
@@ -23,6 +24,23 @@ export class AuthorRepository {
       where: { authorId: id },
     });
     return bookCount;
+  }
+
+  public async getBooksByAuthor(authorId: string): Promise<BookModel[]> {
+    const books = await this.bookRepository.find({
+      where: { authorId },
+      relations: ['author'],
+    });
+    return books.map(book => ({
+      id: book.id,
+      title: book.title,
+      author: {
+        id: book.author.id,
+        firstName: book.author.firstName,
+        lastName: book.author.lastName,
+      },
+      yearPublished: book.yearPublished,
+    }));
   }
 
   public async getAllAuthors(): Promise<AuthorModel[]> {

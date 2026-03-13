@@ -15,7 +15,11 @@ export class AuthorService {
   }
 
   public async getAuthorById(id:string): Promise<AuthorModel | undefined> {
-    return this.authorRepository.getAuthorById(id);
+    const author = await this.authorRepository.getAuthorById(id);
+    if (!author) return undefined;
+    const bookCount = await this.getBookCount(id);
+    const books = await this.authorRepository.getBooksByAuthor(id);
+    return { ...author, bookCount, books };
   }
 
   public async createAuthor(author: CreateAuthorModel): Promise<AuthorModel> {

@@ -1,7 +1,7 @@
-import { Skeleton, Space, Typography } from 'antd'
+import { Skeleton, Space, Typography, Card, Avatar, Descriptions, Button, List } from 'antd'
 import { useAuthorDetailsProvider } from '../providers/useAuthorDetailsProvider'
 import { useEffect } from 'react'
-import { ArrowLeftOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, UserOutlined } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
 import { Route as authorsRoute } from '../../routes/authors'
 
@@ -21,14 +21,87 @@ export const AuthorDetails = ({ id }: AuthorDetailsProps) => {
   }
 
   return (
-    <Space direction="vertical" style={{ textAlign: 'left', width: '95%' }}>
-      <Link to={authorsRoute.to}>
-        <ArrowLeftOutlined />
-      </Link>
-      <Typography.Title level={1}>{author?.id}</Typography.Title>
-      <Typography.Title level={3}>{author?.firstName}</Typography.Title>
-      <Typography.Title level={3}>{author?.lastName}</Typography.Title>
-      <Typography.Paragraph>{author?.info}</Typography.Paragraph>
-    </Space>
+    <Card
+      style={{
+        width: '100%',
+        maxWidth: '800px',
+        margin: '1rem auto',
+      }}
+      title={
+        <Space>
+          <Link to={authorsRoute.to}>
+            <Button icon={<ArrowLeftOutlined />} type="text">
+              Back to Authors
+            </Button>
+          </Link>
+        </Space>
+      }
+    >
+      <Space direction="vertical" size="large" style={{ width: '100%' }}>
+        <Space align="center" size="large">
+          <Avatar
+            icon={<UserOutlined />}
+            size={80}
+            style={{
+              backgroundColor: '#1890ff',
+              fontSize: '32px',
+            }}
+          />
+          <div>
+            <Typography.Title level={2} style={{ margin: 0 }}>
+              {author?.firstName} {author?.lastName}
+            </Typography.Title>
+            <Typography.Text type="secondary">
+              Author ID: {author?.id}
+            </Typography.Text>
+          </div>
+        </Space>
+
+        <Descriptions
+          title="Author Information"
+          bordered
+          column={{ xs: 1, sm: 2, md: 2 }}
+          size="middle"
+        >
+          <Descriptions.Item label="First Name">
+            {author?.firstName}
+          </Descriptions.Item>
+          <Descriptions.Item label="Last Name">
+            {author?.lastName}
+          </Descriptions.Item>
+          <Descriptions.Item label="Books Written">
+            {author?.bookCount ?? 0}
+          </Descriptions.Item>
+          <Descriptions.Item label="Biography" span={2}>
+            {author?.info || 'No biography available'}
+          </Descriptions.Item>
+        </Descriptions>
+
+        {author?.books && author.books.length > 0 && (
+          <List
+            header={<div>Books by this Author</div>}
+            dataSource={author.books}
+            renderItem={(book) => (
+              <List.Item>
+                <List.Item.Meta
+                  title={
+                    <Link
+                      to="/books/$bookId"
+                      params={{ bookId: book.id }}
+                      style={{ color: 'inherit', textDecoration: 'none' }}
+                    >
+                      {book.title}
+                    </Link>
+                  }
+                  description={`Published in ${book.yearPublished}`}
+                />
+              </List.Item>
+            )}
+            size="small"
+            bordered
+          />
+        )}
+      </Space>
+    </Card>
   )
 }

@@ -44,9 +44,9 @@ export function CreateAuthorModal({ onCreate }: CreateAuthorModalProps) {
         size="large"
         shape="round"
         style={{
-          background: 'linear-gradient(135deg, #1890ff 0%, #40a9ff 100%)',
-          border: 'none',
-          boxShadow: '0 4px 12px rgba(24, 144, 255, 0.3)',
+          color: '#fdfaf5',
+          backgroundColor: '#8c5e3c',
+          borderColor: '#8c5e3c',
           fontWeight: 'bold',
         }}
         onClick={() => setIsOpen(true)}

@@ -48,6 +48,8 @@ export function AuthorListItem({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        border: '2px solid #d9d9d9',
       }}
       actions={[
         isEditing ? (
@@ -59,7 +61,15 @@ export function AuthorListItem({
             <CheckOutlined />
           </Button>
         ) : (
-          <Button type="primary" onClick={() => setIsEditing(true)}>
+          <Button
+            type="primary"
+            onClick={() => setIsEditing(true)}
+            style={{
+              color: '#fdfaf5',
+              backgroundColor: '#8c5e3c',
+              borderColor: '#8c5e3c',
+            }}
+          >
             <EditOutlined />
           </Button>
         ),
@@ -68,7 +78,7 @@ export function AuthorListItem({
             <CloseOutlined />
           </Button>
         ) : (
-          <Button type="primary" danger onClick={() => onDelete(author.id)}>
+          <Button type="default" danger onClick={() => onDelete(author.id)}>
             <DeleteOutlined />
           </Button>
         ),
