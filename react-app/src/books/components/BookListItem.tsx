@@ -15,36 +15,34 @@ export function BookListItem({ book }: BookListItemProps) {
     'https://via.placeholder.com/300x400?text=No+Cover+Available'
 
   return (
-    <Card
-      hoverable
-      cover={
-        <img
-          alt={`${book.title} cover`}
-          src={coverImage}
-          style={{ height: 300, objectFit: 'cover' }}
-        />
-      }
-      style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-      bodyStyle={{ flexGrow: 1 }}
-    >
-      <Card.Meta
-        title={
-          <Link to={`/books/$bookId`} params={{ bookId: book.id }}>
-            {book.title}
-          </Link>
+    <Link to={`/books/$bookId`} params={{ bookId: book.id }}>
+      <Card
+        hoverable
+        cover={
+          <img
+            alt={`${book.title} cover`}
+            src={coverImage}
+            style={{ height: 300, objectFit: 'cover' }}
+          />
         }
-        description={
-          <Space direction="vertical" size="small" style={{ width: '100%' }}>
-            <Text type="secondary">{book.yearPublished}</Text>
-            <Text>
-              by{' '}
-              <Text strong>
-                {book.author.firstName} {book.author.lastName}
+        style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+        bodyStyle={{ flexGrow: 1 }}
+      >
+        <Card.Meta
+          title={book.title}
+          description={
+            <Space direction="vertical" size="small" style={{ width: '100%' }}>
+              <Text type="secondary">{book.yearPublished}</Text>
+              <Text>
+                by{' '}
+                <Text strong>
+                  {book.author.firstName} {book.author.lastName}
+                </Text>
               </Text>
-            </Text>
-          </Space>
-        }
-      />
-    </Card>
+            </Space>
+          }
+        />
+      </Card>
+    </Link>
   )
 }
