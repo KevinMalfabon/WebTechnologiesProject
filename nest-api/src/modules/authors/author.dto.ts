@@ -11,6 +11,6 @@ export class CreateAuthorDto {
   @IsOptional()
   info: string;
 
-  @IsInt()
-  bookCount: number;
+  //@IsInt()
+  //bookCount: number;
 }
