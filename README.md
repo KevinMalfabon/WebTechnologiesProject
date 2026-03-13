@@ -1,396 +1,102 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS" />
-  <img src="https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Ant_Design-0170FE?style=for-the-badge&logo=antdesign&logoColor=white" alt="Ant Design" />
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
-  <img src="https://img.shields.io/badge/TypeORM-FE0803?style=for-the-badge&logo=typeorm&logoColor=white" alt="TypeORM" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License" />
-</p>
+# 📚 Bookstore Management System
 
-<h1 align="center">📚 Babel's Library — Bookstore Management System</h1>
+A full-stack bookstore management app built with **NestJS** and **React**. Follows domain-driven organization, layered architecture, and a strict zero-`any` TypeScript policy.
 
-<p align="center">
-  <i>A full-stack bookstore management application for browsing books, managing clients, tracking authors, and recording sales — built with clean architecture and strict TypeScript.</i>
-</p>
-
----
-
-## 📖 Table of Contents
-
-- [Overview](#-overview)
-- [Tech Stack](#-tech-stack)
-- [Architecture](#-architecture)
-- [Features](#-features)
-  - [Book Management](#-book-management)
-  - [Client Management](#-client-management)
-  - [Author Management](#-author-management)
-  - [Sales System](#-sales-system)
-  - [Navigation & UX](#-navigation--ux)
-- [Getting Started](#-getting-started)
-- [Project Structure](#-project-structure)
-- [License](#-license)
-
----
-
-## 🌟 Overview
-
-**Babel's Library** is a full-stack web application designed to manage the day-to-day operations of a bookstore. It provides an intuitive interface for:
-
-- 📖 **Cataloguing books** with cover images, descriptions, authors, and publication years
-- 👥 **Managing a client database** with profile pictures, email contacts, and purchase history
-- ✍️ **Tracking authors** and their book catalogues
-- 🛒 **Recording sales transactions** — linking clients, books, and purchase dates
-
-The project emphasizes **clean architecture**, **domain-driven design**, and **strict TypeScript typing** (zero `any` policy) across both the back-end REST API and the front-end single-page application.
+> Developed for the Web Technologies course at JUNIA.
 
 ---
 
 ## 🛠 Tech Stack
 
-### Back-end
-
-| Technology | Version | Role |
-| --- | --- | --- |
-| **TypeScript** | ~5.7 | Strict typing across the entire codebase — no `any` allowed |
-| **NestJS** | 11 | Modular, decorator-driven REST API framework |
-| **TypeORM** | 0.3 | Object-Relational Mapper — entity definitions, migrations, and query building |
-| **SQLite** | 5.1 | Lightweight, zero-config file-based database |
-| **class-validator** | 0.14 | Declarative DTO validation via decorators (`@IsString()`, `@IsUUID()`, etc.) |
-| **class-transformer** | 0.5 | Automatic serialization / deserialization of request payloads |
-| **ESLint + Prettier** | Latest | Code quality enforcement and consistent formatting |
-
-### Front-end
-
-| Technology | Version | Role |
-| --- | --- | --- |
-| **TypeScript** | ~5.9 | Strict typing — interfaces, branded types, no `any` |
-| **React** | 19 | Component-based UI with hooks and functional components |
-| **Vite** | 7 | Next-gen build tool with instant HMR (Hot Module Replacement) |
-| **Ant Design** | 5 | Enterprise-grade UI component library — Cards, Modals, Tables, Select, DatePicker, etc. |
-| **@tanstack/react-router** | 1.x | Type-safe, file-based routing with parameterized routes |
-| **Axios** | 1.x | Promise-based HTTP client for REST API consumption |
-| **@ant-design/icons** | 5 | Extensive icon set for navigation, actions, and visual indicators |
-| **ESLint + Prettier** | Latest | Code quality enforcement and consistent formatting |
+| Layer | Technologies |
+| --- | --- |
+| **Back-end** | TypeScript · NestJS · TypeORM · SQLite · class-validator |
+| **Front-end** | TypeScript · React 19 (Vite) · Ant Design · @tanstack/react-router · Axios |
 
 ---
 
 ## 🏗 Architecture
 
-The project follows a **layered architecture** with **domain-driven organization** — each business domain (Books, Clients, Authors, Sales) is a fully self-contained module on both sides of the stack.
+### Domain-Driven Modules
 
-### Back-end — Layered Module Structure
+Both back-end and front-end are organized by business domain: **Books**, **Clients**, **Authors**, **Sales**. Each module is self-contained.
 
-```
- HTTP Request
-      │
-      ▼
-┌─────────────┐      ┌─────────────┐      ┌──────────────┐      ┌──────────┐
-│  Controller  │ ───▶ │   Service   │ ───▶ │  Repository  │ ───▶ │  Entity  │
-│  (Routes +   │      │  (Business  │      │  (TypeORM    │      │  (DB     │
-│   Validation)│      │   Logic)    │      │   Queries)   │      │  Schema) │
-└─────────────┘      └─────────────┘      └──────────────┘      └──────────┘
-      │                      │
-      ▼                      ▼
-    DTO                   Model
- (Input validation)    (Output shape)
-```
-
-| Layer | Responsibility | Example |
-| --- | --- | --- |
-| **Controller** | Defines HTTP routes (`@Get`, `@Post`, `@Patch`, `@Delete`), validates incoming data via DTOs, and returns responses | `book.controller.ts` |
-| **Service** | Contains business logic, orchestrates calls to the repository, and transforms between DTOs, entities, and models | `book.service.ts` |
-| **Repository** | Data-access layer — executes TypeORM queries, handles joins, pagination, and sorting | `book.repository.ts` |
-| **Entity** | Database schema definition via TypeORM decorators (`@Entity`, `@Column`, `@ManyToOne`, `@PrimaryGeneratedColumn`) | `book.entity.ts` |
-| **DTO** | Data Transfer Objects — validated with `class-validator` decorators to ensure type-safe request payloads | `book.dto.ts` |
-| **Model** | Clean domain models returned to the client — decoupled from database entities for a clear API contract | `book.model.ts` |
-
-> Each domain module (`books/`, `authors/`, `clients/`, `sales/`) contains **all six layers**, making modules fully independent and easy to maintain, test, or refactor in isolation.
-
-### Front-end — Domain-Driven Organization
+### Back-end Layers
 
 ```
-src/
-├── books/                  # 📖 Book Domain
-│   ├── BookModel.tsx           → TypeScript interfaces (BookModel, CreateBookModel, UpdateBookModel)
-│   ├── components/             → UI components (BookList, BookDetails, BookListItem, CreateBookModal)
-│   ├── pages/                  → Route-level page wrappers
-│   └── providers/              → Data-fetching hooks (useBookProvider, useBookDetailsProvider, useBookAuthorsProviders)
-│
-├── clients/                # 👥 Client Domain
-│   ├── ClientModel.tsx         → TypeScript interfaces (ClientModel, CreateClientModel, UpdateClientModel)
-│   ├── components/             → UI components (ClientList, ClientListItem, ClientDetails, CreateClientModal)
-│   ├── pages/                  → Route-level page wrappers
-│   └── providers/              → Data-fetching hooks (useClientDetailsProvider, useClientSalesProvider)
-│
-├── sales/                  # 🛒 Sales Domain
-│   ├── SaleModel.tsx           → TypeScript interfaces (SaleModel, CreateSaleModel, UpdateSaleModel)
-│   ├── components/             → UI components (SaleList, SaleListItem, SaleDetails, CreateSaleModal)
-│   ├── pages/                  → Route-level page wrappers
-│   └── providers/              → Data-fetching hooks
-│
-├── routes/                 # 🗺️ File-Based Routing (@tanstack/react-router)
-│   ├── __root.tsx              → Root route layout
-│   ├── index.tsx               → Home page
-│   ├── books.tsx               → /books
-│   ├── books.$bookId.tsx       → /books/:bookId (parameterized)
-│   ├── clients.tsx             → /clients
-│   ├── clients.$clientId.tsx   → /clients/:clientId (parameterized)
-│   ├── sales.tsx               → /sales
-│   └── about.tsx               → /about
-│
-├── shared/                 # 🔧 Cross-Cutting Concerns
-│   └── components/
-│       └── AppBreadcrumb.tsx    → Route-aware breadcrumb navigation
-│
-├── Layout.tsx              # 🏠 App Shell — Navigation bar + Breadcrumbs + Content area
-└── main.tsx                # ⚡ Application entry point
+Controller → Service → Repository → Entity
 ```
 
-Each front-end domain mirrors the back-end: a **model** defines the data shape, **components** handle UI rendering, **providers** manage API calls and state, and **pages** wire everything together at the route level.
+| Layer | Role |
+| --- | --- |
+| **Controller** | HTTP routes, DTO validation |
+| **Service** | Business logic, model transformation |
+| **Repository** | TypeORM queries, joins, pagination |
+| **Entity** | Database schema (`@Entity`, `@ManyToOne`, branded IDs) |
+| **DTO / Model** | Input validation / clean API output |
+
+### Front-end Structure
+
+Each domain contains: **Model** (TypeScript interfaces) · **Components** (UI) · **Providers** (API hooks) · **Pages** (route wrappers). Routing uses `@tanstack/react-router` file-based convention with type-safe params.
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-### 📖 Book Management
+### 📖 Books
 
-<table>
-<tr><td width="200"><b>Feature</b></td><td><b>Description</b></td></tr>
-<tr>
-  <td>📋 <b>Book List</b></td>
-  <td>Browse all books displayed as responsive <b>Ant Design Cards</b>. Each card shows the <b>cover image</b> (with a graceful fallback placeholder), <b>title</b> (clickable link to details), <b>publication year</b>, and <b>author name</b>. Cards use <code>hoverable</code> interaction for a polished feel.</td>
-</tr>
-<tr>
-  <td>🔍 <b>Book Details</b></td>
-  <td>Dedicated detail page for each book, accessible via <code>/books/:bookId</code>. Displays the full book information including cover preview, title, year, description, and author. Includes a <b>back-arrow navigation link</b> to return to the list, plus <b>Skeleton loading states</b> while data is being fetched.</td>
-</tr>
-<tr>
-  <td>➕ <b>Create Book</b></td>
-  <td>Opens an <b>Ant Design Modal</b> with a form containing: a text input for the <b>title</b>, a <b>Select dropdown</b> pre-populated with all authors (fetched dynamically when the modal opens), and a <b>numeric input for the year</b>. The OK button is disabled until all required fields are filled. Also supports optional fields for <b>cover image URL</b> and <b>description</b>.</td>
-</tr>
-<tr>
-  <td>🗑️ <b>Delete Book</b></td>
-  <td>Protected by a <b>confirmation modal</b> to prevent accidental data loss. Cascade deletion automatically removes related sale records.</td>
-</tr>
-</table>
+- **List** — responsive card grid with cover image, author, year, and **sales count** (computed via `loadRelationCountAndMap`)
+- **Details** — bento-grid layout: cover on the left, title/author/year cards on the right, description below, embedded sales list with a **"Record Sale"** button
+- **Inline editing** — toggle edit mode to modify any field; author reassignment via searchable dropdown
+- **Delete** — confirmation modal with cascade deletion of related sales
 
-### 👥 Client Management
+### 👥 Clients
 
-<table>
-<tr><td width="200"><b>Feature</b></td><td><b>Description</b></td></tr>
-<tr>
-  <td>📋 <b>Client List</b></td>
-  <td>A clean, row-based list of all clients. Each row displays the client's <b>avatar</b> (from their picture URL, or a default <code>UserOutlined</code> icon), <b>full name</b>, <b>email</b>, and a <b>purchased books count</b> with a book icon. Rows are clickable and navigate to the detail page. Hover effects provide a subtle box-shadow lift.</td>
-</tr>
-<tr>
-  <td>✏️ <b>Inline Editing (List)</b></td>
-  <td>Each client row has an <b>Edit button</b> that toggles the row into edit mode — first name, last name, email, and picture URL become editable <b>Input fields</b> directly in the list. A <b>Save</b> (✓) and <b>Cancel</b> (✕) button pair appears. The Save button is disabled if the name fields are empty.</td>
-</tr>
-<tr>
-  <td>🔍 <b>Client Details (Bento Grid)</b></td>
-  <td>A premium <b>bento-grid layout</b> inspired by modern Apple aesthetics. The detail page is composed of distinct cards:
-    <ul>
-      <li><b>Picture Card</b> — displays the client's image or a "No Image" fallback with instructions</li>
-      <li><b>Client Details Card</b> — shows the full name in large, weighted typography</li>
-      <li><b>Email Card</b> — displays the contact email or an italicized "Not provided" placeholder</li>
-    </ul>
-    Each card has its own <b>Edit button</b> (visible in Edit Mode) that toggles inline editing for that specific field, with live preview for image URLs. A global <b>"Edit Client" / "Done Editing"</b> toggle controls the edit mode.
-  </td>
-</tr>
-<tr>
-  <td>📚 <b>Purchase History</b></td>
-  <td>A <b>"View Purchased Books"</b> button opens an <b>Ant Design Modal</b> listing all books the client has purchased. Each item shows the <b>book title</b> (clickable link to the book detail page), the <b>author name</b>, and the <b>purchase date</b> (formatted). The data is fetched via a dedicated <code>useClientSalesProvider</code> hook.</td>
-</tr>
-<tr>
-  <td>➕ <b>Create Client</b></td>
-  <td>A modal form with fields for <b>first name</b>, <b>last name</b>, <b>email</b> (optional), and <b>picture URL</b> (optional). Validation ensures required fields are filled before submission.</td>
-</tr>
-<tr>
-  <td>🗑️ <b>Delete Client</b></td>
-  <td>Two confirmation UIs depending on context:
-    <ul>
-      <li><b>List view</b> — Ant Design <code>Modal</code> with a clear warning: "You are about to delete <b>[Name]</b>. This action cannot be undone."</li>
-      <li><b>Detail view</b> — Ant Design <code>Popconfirm</code> attached to the delete button for a lightweight inline confirmation</li>
-    </ul>
-    Both trigger cascade deletion of related sales records.
-  </td>
-</tr>
-</table>
+- **List** — avatar, name, email, purchased books count; inline editing directly in the row
+- **Details** — bento-grid with picture, name, email cards; per-field inline editing with live image preview
+- **Purchase history** — modal listing all books bought, with links to book details
+- **Create / Delete** — modal form for creation; confirmation dialog for deletion with cascade
 
-### ✍️ Author Management
+### ✍️ Authors
 
-<table>
-<tr><td width="200"><b>Feature</b></td><td><b>Description</b></td></tr>
-<tr>
-  <td>📋 <b>Author List</b></td>
-  <td>Overview of all registered authors. Each entry displays the author's <b>full name</b> and the <b>total number of books</b> they have authored, giving a quick at-a-glance metric.</td>
-</tr>
-<tr>
-  <td>🔍 <b>Author Details</b></td>
-  <td>A dedicated detail page that shows the author's profile and a <b>complete list of all their books</b>, enabling quick navigation to any book detail page.</td>
-</tr>
-<tr>
-  <td>➕ <b>Create Author</b></td>
-  <td>Modal-based creation form with fields for <b>first name</b> and <b>last name</b>.</td>
-</tr>
-<tr>
-  <td>🗑️ <b>Delete Author</b></td>
-  <td>Confirmation-protected deletion. Cascade rules handle related book and sale records automatically.</td>
-</tr>
-</table>
+- Back-end CRUD module (controller, service, repository, entity)
+- Surfaced in the front-end through book creation/editing author dropdown
 
-### 🛒 Sales System
+### 🛒 Sales & Transactions
 
-The sales system is the relational heart of the application — it connects **Clients**, **Books**, and **Dates** into a unified transaction ledger.
+Records that **Client X bought Book Y on Date Z**.
 
-<table>
-<tr><td width="200"><b>Feature</b></td><td><b>Description</b></td></tr>
-<tr>
-  <td>📋 <b>Sales Ledger</b></td>
-  <td>A full list of all recorded transactions. Each sale row is rendered as a modern card with <b>three icon-labeled sections</b>:
-    <ul>
-      <li>🔵 <b>Client</b> — shows the buyer's full name with a blue <code>UserOutlined</code> icon badge</li>
-      <li>🟣 <b>Book</b> — shows the purchased book title with a purple <code>BookOutlined</code> icon badge</li>
-      <li>🟢 <b>Date</b> — shows the purchase date with a green <code>CalendarOutlined</code> icon badge</li>
-    </ul>
-    Cards use subtle gradients, rounded corners, and box-shadow transitions for a premium visual feel.
-  </td>
-</tr>
-<tr>
-  <td>➕ <b>Record a Sale</b></td>
-  <td>Opens an <b>Ant Design Modal</b> with three smart inputs:
-    <ul>
-      <li><b>Client selector</b> — a <code>Select</code> dropdown (with <b>search/filter</b>) pre-populated with all clients, sorted by last name</li>
-      <li><b>Book selector</b> — a <code>Select</code> dropdown (with <b>search/filter</b>) pre-populated with all books, sorted by title</li>
-      <li><b>Purchase date</b> — an Ant Design <code>DatePicker</code> for precise date selection</li>
-    </ul>
-    The OK button is disabled until all three fields are filled. Client and book lists are <b>fetched dynamically</b> when the modal opens, ensuring up-to-date data.
-  </td>
-</tr>
-<tr>
-  <td>✏️ <b>Edit Sale</b></td>
-  <td>Each sale row can be toggled into <b>inline edit mode</b>. The client and book labels are replaced by <b>searchable Select dropdowns</b>, and the date is replaced by a <b>DatePicker</b> — all pre-filled with the current values. Save/Cancel buttons control the flow with disabled-state validation.</td>
-</tr>
-<tr>
-  <td>🗑️ <b>Delete Sale</b></td>
-  <td>Each sale has a red delete button that opens a <b>confirmation Modal</b> warning that "This sale record will be removed permanently." Deletion is irreversible.</td>
-</tr>
-<tr>
-  <td>🔗 <b>Cross-Domain Integration</b></td>
-  <td>Sales reuse the same API data as the book and client modules. The <b>CreateSaleModal</b> fetches live client and book lists from the REST API, and the client detail page's <b>Purchase History</b> modal reuses the same <code>SaleModel</code> interface, ensuring <b>zero data duplication</b> and consistent typing across the codebase.</td>
-</tr>
-</table>
-
-> **💡 Technical Highlight — Code Reuse & UI Integration:** The Sales Recording feature demonstrates strong code reuse. The `CreateSaleModal` and `SaleListItem` dynamically fetch client and book data from the same REST endpoints used elsewhere in the app. The modal leverages Ant Design's `Select` (with `showSearch` + `optionFilterProp` for type-ahead filtering) and `DatePicker` components, creating a seamless, consistent user experience without building custom form controls.
+- **Two entry points** — from the Sales page (pick client + book + date) or from a Book detail page (book pre-selected, pick client + date)
+- **Searchable selectors** — Ant Design `Select` with `showSearch` for clients and books, `DatePicker` for dates
+- **Sale list** — icon-labeled cards (client, book, date); inline editing with dropdowns and date picker
+- **Relational integrity** — `@ManyToOne` with `CASCADE` delete; existence validation before insert
 
 ### 🧭 Navigation & UX
 
-<table>
-<tr><td width="200"><b>Feature</b></td><td><b>Description</b></td></tr>
-<tr>
-  <td>🗺️ <b>Top Navigation Bar</b></td>
-  <td>A persistent horizontal <b>Ant Design Menu</b> with five entries — <b>Home</b> (🏠), <b>Books</b> (📖), <b>Clients</b> (👥), <b>Sales</b> (🛒), and <b>About</b> (ℹ️) — each with an icon and linked via <code>@tanstack/react-router</code>. The navbar features a branded header: <i>"Babel's Library"</i>.</td>
-</tr>
-<tr>
-  <td>🍞 <b>Breadcrumb Navigation</b></td>
-  <td>A shared <code>AppBreadcrumb</code> component that reads the current route via <code>useMatches()</code> and displays a context-aware breadcrumb with an <b>icon + label</b> for the current section (Books, Clients, Authors, About). Dynamic route parameters (e.g., a specific book ID) are also displayed in the breadcrumb trail.</td>
-</tr>
-<tr>
-  <td>📱 <b>Responsive Design</b></td>
-  <td>The interface is built entirely with <b>Ant Design's responsive grid system</b> (<code>Row</code>/<code>Col</code>) and flexible layouts. Book cards adapt to different screen sizes. The bento-grid client detail page uses CSS grid with responsive breakpoints.</td>
-</tr>
-<tr>
-  <td>⏳ <b>Loading States</b></td>
-  <td>All data views use Ant Design's <b>Skeleton</b> component to display animated placeholders while API data is being fetched — providing visual feedback and preventing layout shifts.</td>
-</tr>
-<tr>
-  <td>🖼️ <b>Image Support</b></td>
-  <td>Books display <b>cover images</b> via URL (with a placeholder fallback). Clients display <b>profile pictures</b> via URL (with a default avatar icon fallback). Image URLs are editable inline on detail pages.</td>
-</tr>
-<tr>
-  <td>⚠️ <b>Error Handling</b></td>
-  <td>Detail pages handle missing data gracefully with Ant Design <b>Alert</b> components ("Client Not Found") and <code>message.success</code> / <code>message.error</code> toast notifications for mutation feedback.</td>
-</tr>
-<tr>
-  <td>🔗 <b>Type-Safe Routing</b></td>
-  <td><code>@tanstack/react-router</code> provides <b>file-based route generation</b> with a generated <code>routeTree.gen.ts</code>. Route parameters like <code>$bookId</code> and <code>$clientId</code> are type-safe, ensuring compile-time validation of all navigation links.</td>
-</tr>
-</table>
+- **Menu** — horizontal nav bar: Home, Books, Clients, Sales, About (with icons)
+- **Breadcrumbs** — route-aware `AppBreadcrumb` via `useMatches()`
+- **Responsive** — `Grid.useBreakpoint()` + CSS media queries (768px / 480px)
+- **Loading states** — `Skeleton` placeholders, `Alert` for missing records, toast notifications
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Installation & Setup
 
-### Prerequisites
-
-| Requirement | Minimum Version |
-| --- | --- |
-| **Node.js** | ≥ 18 |
-| **npm** | ≥ 9 |
-
-### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/<your-org>/WebTechnologiesProject.git
-cd WebTechnologiesProject
-```
-
-### 2️⃣ Start the Back-end (NestJS REST API)
+### Back-end
 
 ```bash
 cd nest-api
 npm install
-npm run start:dev
+npm run start:dev        # → http://localhost:3000
 ```
 
-> The API server starts at **`http://localhost:3000`** with file-watch hot-reload enabled.
-
-<details>
-<summary>📌 Other back-end commands</summary>
-
-| Command | Description |
-| --- | --- |
-| `npm run build` | Compile TypeScript to JavaScript |
-| `npm run start` | Start without watch mode |
-| `npm run start:debug` | Start with debugger attached |
-| `npm run start:prod` | Run the production build |
-| `npm run lint` | Run ESLint on the codebase |
-| `npm run format` | Auto-format with Prettier |
-| `npm test` | Run unit tests (Jest) |
-| `npm run test:cov` | Run tests with coverage report |
-| `npm run test:e2e` | Run end-to-end tests |
-
-</details>
-
-### 3️⃣ Start the Front-end (React + Vite)
+### Front-end
 
 ```bash
 cd react-app
 npm install
-npm run dev
+npm run dev              # → http://localhost:5173
 ```
-
-> The app starts at **`http://localhost:5173`** with Vite's instant HMR.
-
-<details>
-<summary>📌 Other front-end commands</summary>
-
-| Command | Description |
-| --- | --- |
-| `npm run build` | Type-check and build for production |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint on the codebase |
-| `npm run lint:fix` | Auto-fix linting issues |
-| `npm run format` | Auto-format with Prettier |
-| `npm run format:check` | Check formatting without modifying |
-
-</details>
-
-### 4️⃣ Open in Browser
-
-Once both servers are running, navigate to **[http://localhost:5173](http://localhost:5173)** and start exploring Babel's Library!
 
 ---
 
@@ -398,98 +104,24 @@ Once both servers are running, navigate to **[http://localhost:5173](http://loca
 
 ```
 WebTechnologiesProject/
+├── nest-api/
+│   └── src/modules/
+│       ├── authors/        # controller, service, repo, entity, dto, model
+│       ├── books/          # controller, service, repo, entity, dto, model
+│       ├── clients/        # controller, service, repo, entity, dto, model
+│       ├── sales/          # controller, service, repo, entity, dto, model
+│       └── database/
 │
-├── 📦 nest-api/                        ⚙️  Back-end REST API
-│   ├── src/
-│   │   ├── main.ts                     Application bootstrap (port 3000)
-│   │   ├── app.module.ts               Root module — imports all domain modules
-│   │   ├── app.controller.ts           Root health-check controller
-│   │   ├── app.service.ts              Root service
-│   │   └── modules/
-│   │       ├── authors/                ✍️  Author domain module
-│   │       │   ├── author.controller.ts    Routes: GET /, GET /:id, POST /, DELETE /:id
-│   │       │   ├── author.service.ts       Business logic & model transformation
-│   │       │   ├── author.repository.ts    TypeORM queries with book-count aggregation
-│   │       │   ├── author.entity.ts        DB schema (@Entity, @Column, @OneToMany)
-│   │       │   ├── author.dto.ts           Input validation (CreateAuthorDto)
-│   │       │   ├── author.model.ts         Clean API output model
-│   │       │   └── author.module.ts        NestJS module declaration
-│   │       ├── books/                  📖 Book domain module
-│   │       │   ├── book.controller.ts      Routes: GET /, GET /:id, POST /, PATCH /:id, DELETE /:id
-│   │       │   ├── book.service.ts         Business logic with sales-count enrichment
-│   │       │   ├── book.repository.ts      TypeORM queries with author joins
-│   │       │   ├── entities/               Entity definitions
-│   │       │   ├── book.dto.ts             Input validation (CreateBookDto, UpdateBookDto)
-│   │       │   ├── book.model.ts           Clean API output model
-│   │       │   └── book.module.ts          NestJS module declaration
-│   │       ├── clients/                👥 Client domain module
-│   │       │   ├── client.controller.ts    Routes: GET /, GET /:id, POST /, PATCH /:id, DELETE /:id
-│   │       │   ├── client.service.ts       Business logic with purchased-books-count
-│   │       │   ├── client.repository.ts    TypeORM queries with pagination & sorting
-│   │       │   ├── client.entity.ts        DB schema with nullable email & picture
-│   │       │   ├── client.dto.ts           Input validation (CreateClientDto, UpdateClientDto)
-│   │       │   └── client.module.ts        NestJS module declaration
-│   │       ├── sales/                  🛒 Sales domain module
-│   │       │   ├── sale.controller.ts      Routes: GET /, GET /:id, POST /, PATCH /:id, DELETE /:id
-│   │       │   ├── sale.service.ts         Business logic & relation handling
-│   │       │   ├── sale.repository.ts      TypeORM queries with client+book joins
-│   │       │   ├── sale.entity.ts          DB schema: ManyToOne → Client, ManyToOne → Book, CASCADE
-│   │       │   ├── sale.dto.ts             Input validation (CreateSaleDto, UpdateSaleDto)
-│   │       │   ├── sale.model.ts           Clean API output model with nested relations
-│   │       │   └── sale.module.ts          NestJS module declaration
-│   │       └── database/               💾 Database configuration module
-│   ├── db                              SQLite database file
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── eslint.config.mjs
+├── react-app/
+│   └── src/
+│       ├── books/          # model, components, pages, providers
+│       ├── clients/        # model, components, pages, providers
+│       ├── sales/          # model, components, pages, providers
+│       ├── domains/        # Extended views (BookDetails bento-grid)
+│       ├── routes/         # File-based routing
+│       └── shared/         # AppBreadcrumb
 │
-├── 💻 react-app/                       🖥️  Front-end SPA
-│   ├── src/
-│   │   ├── main.tsx                    React entry point + router setup
-│   │   ├── App.tsx                     App root component
-│   │   ├── Layout.tsx                  App shell — nav bar + breadcrumbs + content area
-│   │   ├── routes/                     File-based routing definitions
-│   │   ├── books/                      Book domain (model, components, pages, providers)
-│   │   ├── clients/                    Client domain (model, components, pages, providers)
-│   │   ├── sales/                      Sales domain (model, components, pages, providers)
-│   │   ├── domains/                    Shared domain utilities
-│   │   └── shared/                     Cross-cutting components (AppBreadcrumb)
-│   ├── public/                         Static assets
-│   ├── index.html                      HTML entry point
-│   ├── package.json
-│   ├── vite.config.ts
-│   ├── tsconfig.json
-│   └── eslint.config.js
-│
-└── README.md                           📄 You are here!
+└── README.md
 ```
 
----
 
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
-
-Copyright (c) 2025 Babel's Library Contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
