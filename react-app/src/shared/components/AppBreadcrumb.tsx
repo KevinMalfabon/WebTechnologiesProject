@@ -16,6 +16,7 @@ type RouteParams = {
   bookId?: string
   clientId?: string
   saleId?: string
+  authorId?: string
 }
 
 type AnyRouteMatch = RouteMatch<
@@ -44,7 +45,7 @@ export function AppBreadcrumb(): JSX.Element {
   React.useEffect(() => {
     matches.forEach(m => {
       if (m.params) {
-        const { bookId, clientId, saleId } = m.params as RouteParams
+        const { bookId, clientId, saleId, authorId } = m.params as RouteParams
 
         if (bookId) {
           const key = `book-${bookId}`
@@ -89,6 +90,23 @@ export function AppBreadcrumb(): JSX.Element {
                       ? `${d.client.firstName} ${d.client.lastName}`
                       : saleId
                   setLabelCache(prev => ({ ...prev, [key]: label }))
+                }
+              })
+              .catch(() => {})
+          }
+        }
+
+        if (authorId) {
+          const key = `author-${authorId}`
+          if (!labelCache[key]) {
+            fetch(`http://localhost:3000/authors/${authorId}`)
+              .then(r => r.json())
+              .then(d => {
+                if (d && (d.firstName || d.lastName)) {
+                  setLabelCache(prev => ({
+                    ...prev,
+                    [key]: `${d.firstName ?? ''} ${d.lastName ?? ''}`.trim(),
+                  }))
                 }
               })
               .catch(() => {})
@@ -149,6 +167,12 @@ export function AppBreadcrumb(): JSX.Element {
           <UserOutlined /> Authors
         </span>
       )
+      if (
+        currentMatch.params &&
+        (currentMatch.params as RouteParams).authorId
+      ) {
+        listPath = currentMatch.pathname.replace(/\/[^/]+$/, '')
+      }
     } else if (isSales) {
       sectionTitle = (
         <span>
@@ -188,6 +212,9 @@ export function AppBreadcrumb(): JSX.Element {
       } else if (params.saleId) {
         key = `sale-${params.saleId}`
         dyn = labelCache[key] || params.saleId
+      } else if (params.authorId) {
+        key = `author-${params.authorId}`
+        dyn = labelCache[key] || params.authorId
       }
 
       if (dyn) {
