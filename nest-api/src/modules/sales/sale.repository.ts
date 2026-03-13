@@ -25,12 +25,20 @@ export class SaleRepository {
   public async getAllSales(
     input?: FilterSalesModel,
   ): Promise<[SaleModel[], number]> {
+    const where: any = {};
+    if (input?.clientId) {
+      where.clientId = input.clientId;
+    }
+
     const [sales, totalCount] = await this.saleRepository.findAndCount({
+      where,
       take: input?.limit,
       skip: input?.offset,
       relations: {
         client: true,
-        book: true,
+        book: {
+          author: true,
+        },
       },
       order: input?.sort,
     });

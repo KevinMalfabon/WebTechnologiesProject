@@ -1,37 +1,37 @@
 import { Skeleton, Space, Typography } from 'antd'
-import { useClientDetailsProvider } from '../providers/useSaleDetailsProvider'
+import { useSaleDetailsProvider } from '../providers/useSaleDetailsProvider'
 import { useEffect } from 'react'
 import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Link } from '@tanstack/react-router'
-import { Route as clientsRoute } from '../../routes/clients'
+import { Route as salesRoute } from '../../routes/sales'
 
-interface ClientDetailsProps {
+interface SaleDetailsProps {
   id: string
 }
 
-export const ClientDetails = ({ id }: ClientDetailsProps) => {
-  const { isLoading, client, loadClient } = useClientDetailsProvider(id)
+export const SaleDetails = ({ id }: SaleDetailsProps) => {
+  const { isLoading, sale, loadSale } = useSaleDetailsProvider(id)
 
   useEffect(() => {
-    loadClient()
-  }, [id])
+    loadSale()
+  }, [id, loadSale])
 
   if (isLoading) return <Skeleton active />
 
   return (
     <Space direction="vertical" style={{ textAlign: 'left', width: '95%' }}>
-      <Link to={clientsRoute.to}>
+      <Link to={salesRoute.to}>
         <ArrowLeftOutlined />
       </Link>
 
-      <Typography.Title level={1}>
-        {client?.firstName} {client?.lastName}
+      <Typography.Title level={1}>Sale Details</Typography.Title>
+
+      <Typography.Title level={4}>
+        Book: {sale?.book?.title ?? '—'}
       </Typography.Title>
 
-      <Typography.Title level={4}>{client?.email ?? '—'}</Typography.Title>
-
       <Typography.Text type="secondary">
-        {client?.pictureUrl ?? ''}
+        Client: {sale?.client?.firstName} {sale?.client?.lastName}
       </Typography.Text>
     </Space>
   )

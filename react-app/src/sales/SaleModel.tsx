@@ -11,6 +11,10 @@ export type SaleModel = {
   book?: {
     id: string
     title: string
+    author?: {
+      firstName: string
+      lastName: string
+    }
   }
 }
 

@@ -1,21 +1,21 @@
 import { useState } from 'react'
 import axios from 'axios'
-import type { ClientModel } from '../SaleModel'
+import type { SaleModel } from '../SaleModel'
 
-export const useClientDetailsProvider = (id: string) => {
-  const [client, setClient] = useState<ClientModel | undefined>(undefined)
+export const useSaleDetailsProvider = (id: string) => {
+  const [sale, setSale] = useState<SaleModel | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(false)
 
-  const loadClient = () => {
+  const loadSale = () => {
     setIsLoading(true)
     axios
-      .get(`http://localhost:3000/clients/${id}`)
+      .get(`http://localhost:3000/sales/${id}`)
       .then(res => {
-        setClient(res.data)
+        setSale(res.data)
       })
       .catch(err => console.error(err))
       .finally(() => setIsLoading(false))
   }
 
-  return { client, isLoading, loadClient }
+  return { sale, isLoading, loadSale }
 }
