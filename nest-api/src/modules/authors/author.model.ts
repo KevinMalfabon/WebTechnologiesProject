@@ -1,7 +1,7 @@
 import { AuthorId } from './author.entity';
 
 export type AuthorModel = {
-  id: AuthorId;
+  id: string;
   firstName: string;
   lastName: string;
   info: string;

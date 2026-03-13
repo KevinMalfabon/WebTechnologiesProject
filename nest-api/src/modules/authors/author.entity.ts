@@ -5,7 +5,7 @@ export type AuthorId = string & { __brand: 'Author' };
 @Entity('authors')
 export class AuthorEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: AuthorId;
+  id: string;
 
   @Column({ name: 'first_name', type: 'varchar' , length: 255})
   firstName: string;
