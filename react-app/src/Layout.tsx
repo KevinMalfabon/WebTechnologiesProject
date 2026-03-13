@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import { Route as indexRoute } from './routes/index'
 import { Route as aboutRoute } from './routes/about'
 import { Route as booksRoute } from './routes/books'
@@ -18,6 +18,23 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
+  const location = useLocation()
+
+  let selectedKey: string
+  if (location.pathname === '/') {
+    selectedKey = 'home'
+  } else if (location.pathname.startsWith('/books')) {
+    selectedKey = 'books'
+  } else if (location.pathname.startsWith('/clients')) {
+    selectedKey = 'clients'
+  } else if (location.pathname.startsWith('/sales')) {
+    selectedKey = 'sales'
+  } else if (location.pathname === '/about') {
+    selectedKey = 'about'
+  } else {
+    selectedKey = 'home' // fallback
+  }
+
   const items: Required<MenuProps>['items'] = [
     {
       label: <Link to={indexRoute.to}>Home</Link>,
@@ -63,7 +80,7 @@ export function Layout({ children }: LayoutProps) {
         }}
       >
         <h2 style={{ marginTop: '0' }}>Babel&apos;s Library</h2>
-        <Menu mode="horizontal" items={items} />
+        <Menu mode="horizontal" items={items} selectedKeys={[selectedKey]} />
       </div>
       <div style={{ width: '100%', overflowY: 'scroll' }}>
         <AppBreadcrumb />
