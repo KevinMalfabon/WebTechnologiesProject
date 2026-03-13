@@ -31,6 +31,7 @@ export type FilterSalesModel = {
   offset: number;
   sort?: Partial<Record<keyof SaleModel, 'ASC' | 'DESC'>>;
   clientId?: string;
+  bookId?: string;
 };
 
 export type GetSalesModel = {
