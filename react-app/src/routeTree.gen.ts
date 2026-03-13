@@ -95,8 +95,8 @@ export interface FileRoutesByFullPath {
   '/authors': typeof AuthorsRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/clients': typeof ClientsRouteWithChildren
-  '/authors/$authorId': typeof AuthorsAuthorIdRoute
   '/sales': typeof SalesRouteWithChildren
+  '/authors/$authorId': typeof AuthorsAuthorIdRoute
   '/books/$bookId': typeof BooksBookIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/authors/': typeof AuthorsIndexRoute
@@ -122,8 +122,8 @@ export interface FileRoutesById {
   '/authors': typeof AuthorsRouteWithChildren
   '/books': typeof BooksRouteWithChildren
   '/clients': typeof ClientsRouteWithChildren
-  '/authors/$authorId': typeof AuthorsAuthorIdRoute
   '/sales': typeof SalesRouteWithChildren
+  '/authors/$authorId': typeof AuthorsAuthorIdRoute
   '/books/$bookId': typeof BooksBookIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/authors/': typeof AuthorsIndexRoute
@@ -139,8 +139,8 @@ export interface FileRouteTypes {
     | '/authors'
     | '/books'
     | '/clients'
-    | '/authors/$authorId'
     | '/sales'
+    | '/authors/$authorId'
     | '/books/$bookId'
     | '/clients/$clientId'
     | '/authors/'
@@ -165,8 +165,8 @@ export interface FileRouteTypes {
     | '/authors'
     | '/books'
     | '/clients'
-    | '/authors/$authorId'
     | '/sales'
+    | '/authors/$authorId'
     | '/books/$bookId'
     | '/clients/$clientId'
     | '/authors/'
