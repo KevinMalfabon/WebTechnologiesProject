@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type JSX } from 'react'
 import { Breadcrumb } from 'antd'
 import {
   HomeOutlined,
@@ -203,18 +203,13 @@ export function AppBreadcrumb(): JSX.Element {
     <div
       style={{
         padding: '16px 24px 0',
-        backgroundColor: 'rgba(255,255,255,0.08)',
-        // ensure text and separators show up against the dark page
-        color: '#ffffff',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        maxWidth: '100%',
       }}
     >
-      <Breadcrumb
-        separator=">"
-        items={breadcrumbItems}
-        style={{
-          color: '#f0f0f0',
-        }}
-      />
+      <Breadcrumb separator=">" items={breadcrumbItems} />
     </div>
   )
 

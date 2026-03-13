@@ -1,23 +1,52 @@
-import { useState } from 'react'
-import './App.css'
-import { Hello } from './Hello'
+import { useEffect } from 'react'
+import { useBookProvider } from './books/providers/useBookProvider' // Adjust path if needed
+import { BookListItem } from './books/components/BookListItem'
+import { Row, Col, Typography, Button } from 'antd'
+import { Link } from '@tanstack/react-router'
+
+const { Title } = Typography
 
 function App() {
-  const [name, setName] = useState<string>('')
-  const [newName, setNewName] = useState<string>('')
+  const { books, loadBooks } = useBookProvider()
 
-  const onValidate = () => {
-    setName(newName)
-    setNewName('')
-  }
+  useEffect(() => {
+    loadBooks()
+  }, [])
+
+  const featuredBooks = books.slice(0, 3)
 
   return (
-    <>
-      <Hello name={name}>How are you ?</Hello>
-      <input value={newName} onChange={e => setNewName(e.target.value)} />
-      <button onClick={onValidate}>OK</button>
-      <h3>This is a subtitle</h3>
-    </>
+    <div style={{ padding: '2rem' }}>
+      {/* Hero Section */}
+      <section
+        style={{
+          textAlign: 'center',
+          marginBottom: '4rem',
+          padding: '4rem 0',
+          background: '#f0f2f5',
+        }}
+      >
+        <Title>Welcome to the Book Shop</Title>
+        <p>Discover your next favorite read today.</p>
+        <Link to="/books">
+          <Button type="primary" size="large">
+            Browse All Books
+          </Button>
+        </Link>
+      </section>
+
+      {/* Featured Books Section */}
+      <section>
+        <Title level={2}>Featured Picks</Title>
+        <Row gutter={[24, 24]}>
+          {featuredBooks.map(book => (
+            <Col xs={24} sm={12} md={8} key={book.id}>
+              <BookListItem book={book} />
+            </Col>
+          ))}
+        </Row>
+      </section>
+    </div>
   )
 }
 

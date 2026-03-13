@@ -1,5 +1,3 @@
-import type { BookId } from '../books/entities/book.entity';
-
 export type SaleClientModel = {
   id: string;
   firstName: string;
@@ -22,7 +20,7 @@ export type SaleModel = {
 
 export type CreateSaleModel = {
   clientId: string;
-  bookId: BookId;
+  bookId: string;
   purchasedAt: string;
 };
 
@@ -32,6 +30,8 @@ export type FilterSalesModel = {
   limit: number;
   offset: number;
   sort?: Partial<Record<keyof SaleModel, 'ASC' | 'DESC'>>;
+  clientId?: string;
+  bookId?: string;
 };
 
 export type GetSalesModel = {
