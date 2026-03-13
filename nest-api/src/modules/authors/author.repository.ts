@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { AuthorModel, CreateAuthorModel, UpdateAuthorModel } from './author.model';
+import {
+  AuthorModel,
+  CreateAuthorModel,
+  UpdateAuthorModel,
+} from './author.model';
 import { AuthorEntity, AuthorId } from './author.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IntegerType, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { BookEntity } from '../books/entities/book.entity';
 
 @Injectable()
@@ -14,17 +18,21 @@ export class AuthorRepository {
     private readonly bookRepository: Repository<BookEntity>,
   ) {}
 
-  public async getBookCount(id:string): Promise<number> {
-    const [book,bookCount] = await this.bookRepository.findAndCount({where : {authorId : id as AuthorId }})
-    return bookCount
+  public async getBookCount(id: string): Promise<number> {
+    const [book, bookCount] = await this.bookRepository.findAndCount({
+      where: { authorId: id as AuthorId },
+    });
+    return bookCount;
   }
 
   public async getAllAuthors(): Promise<AuthorModel[]> {
     return this.authorRepository.find();
   }
 
-  public async getAuthorById(id:string): Promise<AuthorModel | undefined> {
-    const author = await this.authorRepository.findOne({where: {id: id as AuthorId}})
+  public async getAuthorById(id: string): Promise<AuthorModel | undefined> {
+    const author = await this.authorRepository.findOne({
+      where: { id: id as AuthorId },
+    });
     if (!author) {
       return undefined;
     }
@@ -36,10 +44,13 @@ export class AuthorRepository {
   }
 
   public async deleteAuthor(id: string): Promise<void> {
-    await this.authorRepository.delete(id)
+    await this.authorRepository.delete(id);
   }
 
-  public async updateAuthor(id: string, author: UpdateAuthorModel): Promise<AuthorModel | undefined> {
+  public async updateAuthor(
+    id: string,
+    author: UpdateAuthorModel,
+  ): Promise<AuthorModel | undefined> {
     const oldAuthor = await this.authorRepository.findOne({
       where: { id: id as AuthorId },
     });
