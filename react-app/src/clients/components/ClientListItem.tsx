@@ -28,7 +28,7 @@ export function ClientListItem({
   const [picture, setPicture] = useState(client.picture ?? '')
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  
+
   const navigate = useNavigate()
 
   const onCancelEdit = () => {
@@ -70,7 +70,10 @@ export function ClientListItem({
         }}
         onClick={() => {
           if (!isEditing) {
-            navigate({ to: '/clients/$clientId', params: { clientId: client.id } })
+            navigate({
+              to: '/clients/$clientId',
+              params: { clientId: client.id },
+            })
           }
         }}
         onMouseEnter={e => {
@@ -190,9 +193,9 @@ export function ClientListItem({
               </Button>
             </>
           ) : (
-            <Button 
-              type="primary" 
-              onClick={(e) => {
+            <Button
+              type="primary"
+              onClick={e => {
                 e.stopPropagation()
                 setIsEditing(true)
               }}
@@ -204,7 +207,7 @@ export function ClientListItem({
           <Button
             type="primary"
             danger
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation()
               setIsDeleteModalOpen(true)
             }}

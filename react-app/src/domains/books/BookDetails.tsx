@@ -168,7 +168,12 @@ export const BookDetails: React.FC<BookDetailsProps> = ({
     updateBook,
   } = useBookDetailsProvider(id || '')
   const { authors, loadAuthors } = useBookAuthorsProviders()
-  const { sales, isLoading: salesLoading, loadSales, createSale } = useBookSalesProvider(id || '')
+  const {
+    sales,
+    isLoading: salesLoading,
+    loadSales,
+    createSale,
+  } = useBookSalesProvider(id || '')
   const navigate = useNavigate()
   const screens = useBreakpoint()
   const isMobile = !screens.md
@@ -308,12 +313,18 @@ export const BookDetails: React.FC<BookDetailsProps> = ({
         <div className="book-details-container">
           <Row gutter={[20, 20]} align="stretch">
             <Col xs={24} md={8}>
-              <div className="bento-card" style={{ minHeight: 400, padding: 24 }}>
+              <div
+                className="bento-card"
+                style={{ minHeight: 400, padding: 24 }}
+              >
                 <Skeleton.Image active style={{ width: '100%', height: 360 }} />
               </div>
             </Col>
             <Col xs={24} md={16}>
-              <div className="bento-card" style={{ padding: 28, height: '100%' }}>
+              <div
+                className="bento-card"
+                style={{ padding: 28, height: '100%' }}
+              >
                 <Skeleton active paragraph={{ rows: 5 }} />
               </div>
             </Col>
@@ -358,7 +369,11 @@ export const BookDetails: React.FC<BookDetailsProps> = ({
         {/* ═══════ MAIN INFO ROW: Cover | Title + Author + Year ═══════ */}
         <Row gutter={[20, 20]} align="stretch">
           {/* ── Left: Cover Image ── */}
-          <Col xs={24} md={8} style={{ display: 'flex', flexDirection: 'column' }}>
+          <Col
+            xs={24}
+            md={8}
+            style={{ display: 'flex', flexDirection: 'column' }}
+          >
             <EditableCard
               label="Cover"
               icon={<BookOutlined />}
@@ -512,7 +527,10 @@ export const BookDetails: React.FC<BookDetailsProps> = ({
                   />
                 }
                 value={
-                  <div className="bento-card-value" style={{ fontSize: 18, fontWeight: 600 }}>
+                  <div
+                    className="bento-card-value"
+                    style={{ fontSize: 18, fontWeight: 600 }}
+                  >
                     {book.yearPublished || '—'}
                   </div>
                 }

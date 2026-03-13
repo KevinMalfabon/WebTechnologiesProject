@@ -68,7 +68,9 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
               <Space size={4}>
                 <ShoppingCartOutlined style={{ color: '#8c8c8c' }} />
                 <Text type="secondary" style={{ fontSize: 12 }}>
-                  {book.salesCount === 1 ? '1 sale' : `${book.salesCount ?? 0} sales`}
+                  {book.salesCount === 1
+                    ? '1 sale'
+                    : `${book.salesCount ?? 0} sales`}
                 </Text>
               </Space>
             </Space>
@@ -92,8 +94,9 @@ export function BookListItem({ book, onDelete }: BookListItemProps) {
         width={isMobile ? '90%' : 520}
       >
         <Text>
-          Are you sure you want to delete <Text strong>"{book.title}"</Text>? This
-          action cannot be undone.
+          Are you sure you want to delete{' '}
+          <Text strong>\&quot;{book.title}\&quot;</Text>? This action cannot be
+          undone.
         </Text>
       </Modal>
     </>

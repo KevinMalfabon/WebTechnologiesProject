@@ -11,7 +11,6 @@ import {
 import { Link, useMatches, type RouteMatch } from '@tanstack/react-router'
 import axios from 'axios'
 
-
 type AnyParams = Record<string, string | undefined>
 
 type AnyRouteMatch = RouteMatch<
@@ -58,23 +57,41 @@ export function AppBreadcrumb(): JSX.Element {
     const isSales = last.pathname.startsWith('/sales')
     const isAbout = last.pathname === '/about'
 
-    const domainIcon = isHome ? <HomeOutlined /> :
-      isBooks ? <BookOutlined /> :
-      isClients ? <TeamOutlined /> :
-      isAuthors ? <UserOutlined /> :
-      isSales ? <ShoppingCartOutlined /> :
-      isAbout ? <InfoOutlined /> : null
+    const domainIcon = isHome ? (
+      <HomeOutlined />
+    ) : isBooks ? (
+      <BookOutlined />
+    ) : isClients ? (
+      <TeamOutlined />
+    ) : isAuthors ? (
+      <UserOutlined />
+    ) : isSales ? (
+      <ShoppingCartOutlined />
+    ) : isAbout ? (
+      <InfoOutlined />
+    ) : null
 
-    const domainLabel = isHome ? 'Home' :
-      isBooks ? 'Books' :
-      isClients ? 'Clients' :
-      isAuthors ? 'Authors' :
-      isSales ? 'Sales' :
-      isAbout ? 'About' : ''
+    const domainLabel = isHome
+      ? 'Home'
+      : isBooks
+        ? 'Books'
+        : isClients
+          ? 'Clients'
+          : isAuthors
+            ? 'Authors'
+            : isSales
+              ? 'Sales'
+              : isAbout
+                ? 'About'
+                : ''
 
-    const domainLink = isBooks ? '/books' :
-      isClients ? '/clients' :
-      isSales ? '/sales' : undefined
+    const domainLink = isBooks
+      ? '/books'
+      : isClients
+        ? '/clients'
+        : isSales
+          ? '/sales'
+          : undefined
 
     if (dyn && domainLink) {
       // Detail page: show parent domain as link, then detail name
